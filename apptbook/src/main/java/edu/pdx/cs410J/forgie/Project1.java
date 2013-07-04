@@ -36,13 +36,14 @@ public class Project1 {
             "  -README";
 
 
-    private static final String README = "\tProject1 parses 6-8 command line strings, two options are -print and -README. -print prints the\n" +
-            "description of the appointment that has been added. -README prints this description and exits. The other\n" +
-            "arguments (in this order: Owner, Description, BeginTime, EndTime) are used to create an appointment that\n" +
+    private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
+            USAGE +
+            "\n\n"+
+            "    Project1 parses 6-8 command line arguments that are used to create an appointment. The appointment\n" +
             "will be stored in an appointment book of an 'Owner'. An appointment book consists of the owners name and\n" +
             "a collection of appointments. An appointment consists of; a 'description' describing the appointment, a\n" +
             "'beginTime' indicating the start date and time of the appointment, and an 'endTime' indicating the date\n" +
-            "and time the appointment will end.\n";
+            "and time the appointment will end.";
 
 
 
@@ -68,6 +69,10 @@ public class Project1 {
           System.exit(1);
       }else{
           if(args.length == 1){
+              if(args[0].equals("-README")){
+                  readMe();
+              }
+
               clearScreen();
               System.err.println("Missing description");
               printArgsEntered(args);
@@ -75,6 +80,10 @@ public class Project1 {
               System.exit(1);
           }else{
               if(args.length == 2){
+                  if(args[0].equals("-REAMDE") || args[1].equals("-README")){
+                      readMe();
+                  }
+
                   clearScreen();
                   System.err.println("Missing begin date");
                   printArgsEntered(args);
@@ -208,7 +217,7 @@ public class Project1 {
         clearScreen();
         System.out.printf("%60s" , "Project1-README\n");
         System.out.printf("%100s", "Shawn Forgie\n\n");
-        System.out.println(README + "\n" + USAGE);
+        System.out.println(README);
         System.exit(0);
     }
 
