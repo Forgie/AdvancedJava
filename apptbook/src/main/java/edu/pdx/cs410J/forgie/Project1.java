@@ -22,26 +22,45 @@ public class Project1 {
     //Class c = AbstractAppointmentBook.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
       if(args.length == 0){
-        System.err.println("Missing command line arguments");
-        System.err.println(USAGE);
+        System.err.println("Missing command line arguments\n" + USAGE);
          System.exit(1);
       }else{
           if(args.length == 1){
-              System.err.println("Missing description");
-              System.err.println(USAGE);
+              System.err.println("Missing description\n" + USAGE);
               System.exit(1);
           }else{
               if(args.length == 2){
-                  System.err.println("Missing begin date");
-                  System.err.println(USAGE);
+                  System.err.println("Missing begin date\n" + USAGE);
                   System.exit(1);
+              }else{
+                  if(args.length == 3){
+                      System.err.println("Missing begin time\n" + USAGE);
+                      System.exit(1);
+                  }else{
+                      if(args.length == 4){
+                          System.err.println("Missing end date\n" + USAGE);
+                          System.exit(1);
+                      }else{
+                          if(args.length == 5){
+                              System.err.println("Missing end time\n" + USAGE);
+                              System.exit(1);
+                          }
+                      }
+                  }
               }
           }
       }
 
+    for(int i = 0; i <= 80; i++){
+        System.out.println();
+    }
+
+
     for (String arg : args) {
       System.out.println(arg);
     }
+
+
     System.exit(0);
   }
 
