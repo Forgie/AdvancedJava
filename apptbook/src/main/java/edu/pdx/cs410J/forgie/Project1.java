@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.forgie;
 
+import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
 import java.text.ParseException;
@@ -19,7 +20,8 @@ public class Project1 {
     private static String endTime;
     private static Date date;
     private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
-
+    private static Appointment appointment;
+    private static AbstractAppointmentBook appointmentBook;
 
     static final String USAGE = "args are (in this order):\n" +
             "  owner\n" +
@@ -160,15 +162,15 @@ public class Project1 {
         checkDateTimeFormat("End", endTime);
 
 
-
-
-
-
+        appointment = new Appointment(description, beginTime, endTime);
+        appointmentBook = new AppointmentBook(owner);
+        appointmentBook.addAppointment(appointment);
 
         clearScreen();
+        if(print){
+            System.out.println(appointment.toString());
+        }
 
-
-        printArgsEntered(args);
 
 
         System.exit(0);
@@ -176,7 +178,7 @@ public class Project1 {
 
 
     /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0-24hr)
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0:00-23:59)
      *
      * @param string    Identify if this is the start date/time or end date/time
      * @param dateTime  The date/time that needs to be checked
@@ -187,7 +189,7 @@ public class Project1 {
         }catch(ParseException ex){
             clearScreen();
             System.err.println(string + " date/time format is incorrect: " + dateTime
-                                      + "\nShould be in the form: mm/dd/yyyy hh:mm (0-24hr)");
+                    + "\nShould be in the form: mm/dd/yyyy hh:mm (0:00-23:59)");
             System.exit(1);
         }
     }
