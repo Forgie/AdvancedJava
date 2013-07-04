@@ -8,20 +8,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <code>Project1</code> is the main class for the CS410J Project 1
+ * <code>Project1</code> is the main class for the CS410J Project 1 and
+ * utilizes {@link Appointment} and {@link AppointmentBook}
  *
  * @author Shawn Forgie
  */
 public class Project1 {
 
-    private static String owner;
-    private static String description;
-    private static String beginTime;
-    private static String endTime;
-    private static Date date;
-    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
-    private static Appointment appointment;
-    private static AbstractAppointmentBook appointmentBook;
+    static String owner;
+    static String description;
+    static String beginTime;
+    static String endTime;
+    static Date date;
+    static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
+    static AbstractAppointment appointment;
+    static AbstractAppointmentBook appointmentBook;
 
     static final String USAGE = "args are (in this order):\n" +
             "  owner\n" +
@@ -56,13 +57,9 @@ public class Project1 {
      * @param args  [options] -print, -README [arguments] Owner, Description, Begin Date, Begin Time, End Date, End Time
      */
     public static void main(String[] args) {
-    //Class c = AbstractAppointmentBook.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
       boolean print = false;
       int start = 0;
-
-      //Date date = null;
-      //SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
       format.setLenient(false);
 
       if(args.length == 0){
@@ -145,7 +142,6 @@ public class Project1 {
       }
 
 
-
         owner = args[start++];
         description = args[start++];
         beginTime = args[start++] + " " + args[start++];
@@ -155,7 +151,7 @@ public class Project1 {
         checkDateTimeFormat("Begin", beginTime);
 
 
-        endTime = args[start++] + " " + args[start++];
+        endTime = args[start++] + " " + args[start];
 
 
         //Check that end date is in correct format
