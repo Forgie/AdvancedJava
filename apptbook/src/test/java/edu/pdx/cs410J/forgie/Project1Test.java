@@ -21,7 +21,7 @@ public class Project1Test extends InvokeMainTestCase {
    * Tests that invoking the main method with no arguments issues an error
    */
   @Test
-  public void testNoCommandLineArguments() {
+  public void NoCommandLineArgumentsPrintsMissingCommandLineArgsToStandardError() {
     MainMethodResult result = invokeMain();
     assertEquals(new Integer(1), result.getExitCode());
     assertTrue(result.getErr().contains( "Missing command line arguments" ));
@@ -31,7 +31,15 @@ public class Project1Test extends InvokeMainTestCase {
   public void onlyOneArgumentPrintsMissingDescriptionToStandardError(){
       MainMethodResult result = invokeMain("Owner");
       assertEquals(new Integer(1), result.getExitCode());
-       assertTrue(result.getErr().contains( "Missing Description" ));
+       assertTrue(result.getErr().contains( "Missing description" ));
   }
+
+    @Test
+    public void onlyTwoArgumentsPrintsMissingBeginDateToStandardError(){
+        MainMethodResult result = invokeMain("Owner", "Description");
+        assertEquals(new Integer(1), result.getExitCode());
+        assertTrue(result.getErr().contains("Missing begin date"));
+
+    }
 
 }
