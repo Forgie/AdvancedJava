@@ -27,4 +27,11 @@ public class Project1Test extends InvokeMainTestCase {
     assertTrue(result.getErr().contains( "Missing command line arguments" ));
   }
 
+  @Test
+  public void onlyOneArgumentPrintsMissingDescriptionToStandardError(){
+      MainMethodResult result = invokeMain("Owner");
+      assertEquals(new Integer(1), result.getExitCode());
+       assertTrue(result.getErr().contains( "Missing Description" ));
+  }
+
 }
