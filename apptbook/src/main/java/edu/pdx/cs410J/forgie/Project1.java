@@ -51,17 +51,21 @@ public class Project1 {
           }
       }
 
-    for(int i = 0; i <= 80; i++){
-        System.out.println();
-    }
+        clearScreen();
 
 
-    for (String arg : args) {
+        for (String arg : args) {
       System.out.println(arg);
     }
 
 
     System.exit(0);
   }
+
+    static void clearScreen() {
+        for(int i = 0; i <= 80; i++){
+            System.out.println();
+        }
+    }
 
 }
