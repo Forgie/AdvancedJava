@@ -8,42 +8,104 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 public class Project1 {
 
     static final String USAGE = "args are (in this order):\n" +
-            "\towner\n" +
-            "\tdescription\n" +
-            "\tbeginDate\n" +
-            "\tbeginTime\n" +
-            "\tendDate\n" +
-            "\tendTime\n" +
+            "  owner\n" +
+            "  description\n" +
+            "  beginDate\n" +
+            "  beginTime\n" +
+            "  endDate\n" +
+            "  endTime\n" +
             "options are (in any order):\n" +
-            "\t-print\n" +
-            "\t-README";
+            "  -print\n" +
+            "  -README";
+
+
+    private static final String README = "\tProject1 parses 6-8 command line strings, two options are -print and -README. -print prints the\n" +
+            "description of the appointment that has been added. -README prints this description and exits. The other\n" +
+            "arguments (in this order: Owner, Description, BeginTime, EndTime) are used to create an appointment that\n" +
+            "will be stored in an appointment book of an 'Owner'. An appointment book consists of the owners name and\n" +
+            "a collection of appointments. An appointment consists of; a 'description' describing the appointment, a\n" +
+            "'beginTime' indicating the start date and time of the appointment, and an 'endTime' indicating the date\n" +
+            "and time the appointment will end.\n";
 
     public static void main(String[] args) {
     //Class c = AbstractAppointmentBook.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
+      boolean print = false;
+      int start = 0;
+
+
       if(args.length == 0){
-        System.err.println("Missing command line arguments\n" + USAGE);
-         System.exit(1);
+          clearScreen();
+          System.err.println("Missing command line arguments\n" + USAGE);
+          System.exit(1);
       }else{
           if(args.length == 1){
-              System.err.println("Missing description\n" + USAGE);
+              clearScreen();
+              System.err.println("Missing description");
+              printArgsEntered(args);
+              System.err.println(USAGE);
               System.exit(1);
           }else{
               if(args.length == 2){
-                  System.err.println("Missing begin date\n" + USAGE);
+                  clearScreen();
+                  System.err.println("Missing begin date");
+                  printArgsEntered(args);
+                  System.err.println(USAGE);
                   System.exit(1);
               }else{
                   if(args.length == 3){
-                      System.err.println("Missing begin time\n" + USAGE);
+                      clearScreen();
+                      System.err.println("Missing begin time");
+                      printArgsEntered(args);
+                      System.err.println(USAGE);
                       System.exit(1);
                   }else{
                       if(args.length == 4){
-                          System.err.println("Missing end date\n" + USAGE);
+                          clearScreen();
+                          System.err.println("Missing end date");
+                          printArgsEntered(args);
+                          System.err.println(USAGE);
                           System.exit(1);
                       }else{
                           if(args.length == 5){
-                              System.err.println("Missing end time\n" + USAGE);
+                              clearScreen();
+                              System.err.println("Missing end time");
+                              printArgsEntered(args);
+                              System.err.println(USAGE);
                               System.exit(1);
+                          }else{
+                              if(args.length == 7){
+                                  if(args[0].equals("-print")){
+                                      print = true;
+                                      start = 1;
+                                  }else{
+                                      if(args[0].equals("-README")){
+                                          readMe();
+                                      }else{
+                                          clearScreen();
+                                          System.err.println(args[0] + " is an invalid option\n" + USAGE);
+                                          System.exit(1);
+                                      }
+                                  }
+                              }else{
+                                  if(args.length == 8){
+                                      if((args[0].equals("-print") && args[1].equals("-README")) || (args[0].equals("-README") && args[1].equals("-print"))){
+                                          readMe();
+                                      }else{
+                                          clearScreen();
+                                          System.err.println("An invalid option has been entered\n"
+                                                  + args[0] + "\t"
+                                                  + args[1] + "\n"
+                                                  + USAGE);
+                                          System.exit(1);
+                                      }
+                                  }else{
+                                      if(args.length > 8){
+                                          System.err.println("Too many command line arguments" );
+                                          printArgsEntered(args);
+                                      }
+                                  }
+                              }
                           }
                       }
                   }
@@ -54,13 +116,25 @@ public class Project1 {
         clearScreen();
 
 
+        printArgsEntered(args);
+
+
+        System.exit(0);
+  }
+
+    private static void printArgsEntered(String[] args) {
         for (String arg : args) {
-      System.out.println(arg);
+            System.out.println("\t" + arg);
+        }
     }
 
-
-    System.exit(0);
-  }
+    static void readMe() {
+        clearScreen();
+        System.out.printf("%60s" , "Project1-README\n");
+        System.out.printf("%100s", "Shawn Forgie\n\n");
+        System.out.println(README + "\n" + USAGE);
+        System.exit(0);
+    }
 
     static void clearScreen() {
         for(int i = 0; i <= 80; i++){
