@@ -10,3 +10,6 @@
 *.iml
 *.iws
 
+# Maven build artifacts should not be committed #
+target
+ */target
