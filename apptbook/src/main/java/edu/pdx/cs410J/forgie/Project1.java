@@ -2,12 +2,24 @@ package edu.pdx.cs410J.forgie;
 
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * <code>Project1</code> is the main class for the CS410J Project 1
  *
  * @author Shawn Forgie
  */
 public class Project1 {
+
+    private static String owner;
+    private static String description;
+    private static String beginTime;
+    private static String endTime;
+    private static Date date;
+    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
+
 
     static final String USAGE = "args are (in this order):\n" +
             "  owner\n" +
@@ -47,6 +59,9 @@ public class Project1 {
       boolean print = false;
       int start = 0;
 
+      //Date date = null;
+      //SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
+      format.setLenient(false);
 
       if(args.length == 0){
           clearScreen();
@@ -129,15 +144,53 @@ public class Project1 {
 
 
 
+        owner = args[start++];
+        description = args[start++];
+        beginTime = args[start++] + " " + args[start++];
+
+
+        //Check that begin date is in correct format
+        checkDateTimeFormat("Begin", beginTime);
+
+
+        endTime = args[start++] + " " + args[start++];
+
+
+        //Check that end date is in correct format
+        checkDateTimeFormat("End", endTime);
+
+
+
+
+
+
 
         clearScreen();
 
 
-    printArgsEntered(args);
+        printArgsEntered(args);
 
 
         System.exit(0);
   }
+
+
+    /**
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0-24hr)
+     *
+     * @param string    Identify if this is the start date/time or end date/time
+     * @param dateTime  The date/time that needs to be checked
+     */
+    static void checkDateTimeFormat(String string, String dateTime) {
+        try{
+            date = format.parse(dateTime);
+        }catch(ParseException ex){
+            clearScreen();
+            System.err.println(string + " date/time format is incorrect: " + dateTime
+                                      + "\nShould be in the form: mm/dd/yyyy hh:mm (0-24hr)");
+            System.exit(1);
+        }
+    }
 
     /**
      * Displays all command line arguments the user entered.
