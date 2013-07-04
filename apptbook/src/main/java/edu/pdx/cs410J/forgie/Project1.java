@@ -3,7 +3,9 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
 /**
- * The main class for the CS410J appointment book Project
+ * <code>Project1</code> is the main class for the CS410J Project 1
+ *
+ * @author Shawn Forgie
  */
 public class Project1 {
 
@@ -14,7 +16,7 @@ public class Project1 {
             "  beginTime\n" +
             "  endDate\n" +
             "  endTime\n" +
-            "options are (in any order):\n" +
+            "options are (at the beginning in any order):\n" +
             "  -print\n" +
             "  -README";
 
@@ -27,6 +29,18 @@ public class Project1 {
             "'beginTime' indicating the start date and time of the appointment, and an 'endTime' indicating the date\n" +
             "and time the appointment will end.\n";
 
+
+
+
+
+
+    /**
+     * Main method that parses command line arguments.
+     * Creates appointments and appointment books for
+     * owners.
+     *
+     * @param args  [options] -print, -README [arguments] Owner, Description, Begin Date, Begin Time, End Date, End Time
+     */
     public static void main(String[] args) {
     //Class c = AbstractAppointmentBook.class;  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
@@ -113,21 +127,32 @@ public class Project1 {
           }
       }
 
+
+
+
         clearScreen();
 
 
-        printArgsEntered(args);
+    printArgsEntered(args);
 
 
         System.exit(0);
   }
 
+    /**
+     * Displays all command line arguments the user entered.
+     * @param args      Command line arguments entered by user.
+     */
     private static void printArgsEntered(String[] args) {
         for (String arg : args) {
             System.out.println("\t" + arg);
         }
     }
 
+
+    /**
+     * Prints a brief, concise, and nicely-formatted textual description of what project1 does.
+     */
     static void readMe() {
         clearScreen();
         System.out.printf("%60s" , "Project1-README\n");
@@ -136,6 +161,10 @@ public class Project1 {
         System.exit(0);
     }
 
+
+    /**
+     * Clears the command line screen, makes it more readable.
+     */
     static void clearScreen() {
         for(int i = 0; i <= 80; i++){
             System.out.println();
