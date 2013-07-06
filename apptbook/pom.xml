@@ -75,7 +75,7 @@
               <addClasspath>true</addClasspath>
               <classpathPrefix>${user.home}/.m2/repository/</classpathPrefix>
                 <classpathLayoutType>repository</classpathLayoutType>
-              <mainClass>edu.pdx.cs410J.forgie.Project1</mainClass>
+              <mainClass>edu.pdx.cs410J.forgie.Project2</mainClass>
             </manifest>
           </archive>
         </configuration>

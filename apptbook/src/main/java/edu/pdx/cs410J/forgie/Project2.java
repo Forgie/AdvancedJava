@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author Shawn Forgie
  */
-public class Project1 {
+public class Project2 {
 
     static String owner;
     static String description;
@@ -24,7 +24,7 @@ public class Project1 {
     static AbstractAppointment appointment;
     static AbstractAppointmentBook appointmentBook;
 
-    static final String USAGE = "args are (in this order):\n" +
+    static final String USAGE = "\nargs are (in this order):\n" +
             "  owner\n" +
             "  description\n" +
             "  beginDate\n" +
@@ -33,12 +33,13 @@ public class Project1 {
             "  endTime\n" +
             "options are (at the beginning in any order):\n" +
             "  -print\n" +
-            "  -README";
+            "  -README\n"  +
+            "  -textFile <filename>\n";
 
 
     private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
             USAGE +
-            "\n\n"+
+            "\n"+
             "    Project1 parses 6-8 command line arguments that are used to create an appointment. The appointment\n" +
             "will be stored in an appointment book of an 'Owner'. An appointment book consists of the owners name and\n" +
             "a collection of appointments. An appointment consists of; a 'description' describing the appointment, a\n" +
@@ -60,95 +61,76 @@ public class Project1 {
     public static void main(String[] args) {
 
       boolean print = false;
+      String textFile = null;
+      String missingArgs = "";
+      int i, j = 0;
       int start = 0;
+      int count = args.length;
       format.setLenient(false);
 
-      if(args.length == 0){
-          clearScreen();
-          System.err.println("Missing command line arguments\n" + USAGE);
-          System.exit(1);
-      }else{
-          if(args.length == 1){
-              if(args[0].equals("-README")){
-                  readMe();
-              }
 
-              clearScreen();
-              System.err.println("Missing description");
-              printArgsEntered(args);
-              System.err.println(USAGE);
-              System.exit(1);
-          }else{
-              if(args.length == 2){
-                  if(args[0].equals("-REAMDE") || args[1].equals("-README")){
-                      readMe();
-                  }
+        if(args.length > 0){
+            if(args.length >= 3){
+                j = 3;
+            }else{
+                if(args.length == 2){
+                    j = 2;
+                }else{
+                    if(args.length == 1)
+                    j = 1;
+                }
+            }
+            //check for options at start
+            for(i = 0; i < j; i++){
+                if(args[i].equals("-print")){
+                    print = true;
+                    ++start;
+                }
+                if(args[i].equals("-README")){
+                    readMe();
+                }
+                if(args[i].equals("-textFile")){
+                    if(args.length > (i+1)){
+                        textFile = args[++i];
+                        start += 2;
+                    }
+                }
+            }
+            if(start > 0)
+                count = args.length - start;
+        }
 
-                  clearScreen();
-                  System.err.println("Missing begin date");
-                  printArgsEntered(args);
-                  System.err.println(USAGE);
-                  System.exit(1);
-              }else{
-                  if(args.length == 3){
-                      clearScreen();
-                      System.err.println("Missing begin time");
-                      printArgsEntered(args);
-                      System.err.println(USAGE);
-                      System.exit(1);
-                  }else{
-                      if(args.length == 4){
-                          clearScreen();
-                          System.err.println("Missing end date");
-                          printArgsEntered(args);
-                          System.err.println(USAGE);
-                          System.exit(1);
-                      }else{
-                          if(args.length == 5){
-                              clearScreen();
-                              System.err.println("Missing end time");
-                              printArgsEntered(args);
-                              System.err.println(USAGE);
-                              System.exit(1);
-                          }else{
-                              if(args.length == 7){
-                                  if(args[0].equals("-print")){
-                                      print = true;
-                                      start = 1;
-                                  }else{
-                                      if(args[0].equals("-README")){
-                                          readMe();
-                                      }else{
-                                          clearScreen();
-                                          System.err.println(args[0] + " is an invalid option\n" + USAGE);
-                                          System.exit(1);
-                                      }
-                                  }
-                              }else{
-                                  if(args.length == 8){
-                                      if((args[0].equals("-print") && args[1].equals("-README")) || (args[0].equals("-README") && args[1].equals("-print"))){
-                                          readMe();
-                                      }else{
-                                          clearScreen();
-                                          System.err.println("An invalid option has been entered\n"
-                                                  + args[0] + "\t"
-                                                  + args[1] + "\n"
-                                                  + USAGE);
-                                          System.exit(1);
-                                      }
-                                  }else{
-                                      if(args.length > 8){
-                                          System.err.println("Too many command line arguments" );
-                                          printArgsEntered(args);
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
+     if(args.length > 3){
+         if(args[3].equals("-README")){
+             readMe();
+         }
+     }
+     if(count > 6){
+         clearScreen();
+         System.err.println("Too many command line arguments.");
+         printArgsEntered(args);
+         System.err.println(USAGE);
+         System.exit(1);
+     }
+
+     switch(count){
+         case 0:
+                missingArgs = " owners name,";
+         case 1:
+                missingArgs += " description,";
+         case 2:
+                missingArgs += " begin date,";
+         case 3:
+                missingArgs += " begin time,";
+         case 4:
+                missingArgs += " end date,";
+         case 5:
+             clearScreen();
+             System.err.println("Missing command line arguments: " + missingArgs + " end time");
+             printArgsEntered(args);
+             System.err.println(USAGE);
+             System.exit(1);
+     }
 
 
         owner = args[start++];
@@ -204,6 +186,7 @@ public class Project1 {
      * @param args      Command line arguments entered by user.
      */
     private static void printArgsEntered(String[] args) {
+        System.out.println("You entered:");
         for (String arg : args) {
             System.out.println("\t" + arg);
         }
@@ -230,5 +213,4 @@ public class Project1 {
             System.out.println();
         }
     }
-
 }
