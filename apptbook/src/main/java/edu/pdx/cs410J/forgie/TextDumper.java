@@ -14,6 +14,7 @@ import java.io.*;
  */
 public class TextDumper implements AppointmentBookDumper {
     String File;
+
     public TextDumper(String fileName){
         this.File = fileName;
     }
@@ -25,30 +26,6 @@ public class TextDumper implements AppointmentBookDumper {
      * @param book An appointment book to be stored in a specified file
      * @throws  IOException
      */
-    //public void dump(AbstractAppointmentBook book) throws IOException {
-       // OutputStream file = new FileOutputStream(textFile);
-       // OutputStreamWriter buffer = new OutputStreamWriter(file);
-       // Writer writer = new BufferedWriter(buffer);
-
-       // writer.writeln(book.getOwnerName() + "~" + book.getAppointments());
-
-    /*
-    Writer writer = null;
-
-try {
-    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("filename.txt"), "utf-8"));
-    writer.writeln("Something");
-    } catch (IOException ex){
-        // report
-   } finally{
-        try {
-        writer.close();
-        } catch (Exception ex) {}
-   }
-     */
-
-   // }
-
     public void dump(AbstractAppointmentBook book) throws IOException{
 
         try{
@@ -57,7 +34,7 @@ try {
             OutputStreamWriter buffer = new OutputStreamWriter(file);
             Writer writer = new BufferedWriter(buffer);
             try{
-                writer.write(book.toString() + "~" + book.getAppointments());
+                writer.write(book.getOwnerName() + book.getAppointments());
             }finally{
                 writer.close();
             }

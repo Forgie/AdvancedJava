@@ -2,6 +2,7 @@ package edu.pdx.cs410J.forgie;
 
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
+import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
 import java.text.ParseException;
@@ -152,7 +153,15 @@ public class Project2 {
         checkDateTimeFormat("End", endTime);
 
 
-
+        TextParser textParser = new TextParser(textFile + ".txt");
+       /*
+        try{
+            appointmentBook = textParser.parse();
+        }catch(ParserException ex){
+            System.err.println("Text file is malformatted");
+            System.exit(1);
+        }
+        */
 
         appointment = new Appointment(description, beginTime, endTime);
         appointmentBook = new AppointmentBook(owner);
