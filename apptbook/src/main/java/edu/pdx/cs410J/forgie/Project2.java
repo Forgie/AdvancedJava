@@ -3,6 +3,7 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,10 +20,13 @@ public class Project2 {
     static String description;
     static String beginTime;
     static String endTime;
+    static String textFile = "";
     static Date date;
     static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
     static AbstractAppointment appointment;
     static AbstractAppointmentBook appointmentBook;
+
+
 
     static final String USAGE = "\nargs are (in this order):\n" +
             "  owner\n" +
@@ -61,7 +65,6 @@ public class Project2 {
     public static void main(String[] args) {
 
       boolean print = false;
-      String textFile = null;
       String missingArgs = "";
       int i, j = 0;
       int start = 0;
@@ -149,12 +152,26 @@ public class Project2 {
         checkDateTimeFormat("End", endTime);
 
 
+
+
         appointment = new Appointment(description, beginTime, endTime);
         appointmentBook = new AppointmentBook(owner);
         appointmentBook.addAppointment(appointment);
 
-        clearScreen();
+
+        TextDumper textDumper = new TextDumper(textFile + ".txt");
+
+        try{
+            textDumper.dump(appointmentBook);
+        }catch(IOException ex){
+            System.err.println("Appointment could not be written to " + textFile);
+            System.exit(0);
+        }
+
+
+
         if(print){
+            clearScreen();
             System.out.println(appointment.toString());
         }
 
