@@ -13,3 +13,6 @@
 # Maven build artifacts should not be committed #
 target
  */target
+
+# Generated Text Files #
+*.txt
