@@ -7,11 +7,10 @@ import edu.pdx.cs410J.AppointmentBookDumper;
 import java.io.IOException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Shawn
+ * <code>TextDumper</code> writes an appointment book to an external file designated by a user.
+ *
+ * @author Shawn Forgie
  * Date: 7/5/13
- * Time: 6:35 PM
- * To change this template use File | Settings | File Templates.
  */
 public class TextDumper implements AppointmentBookDumper {
 
