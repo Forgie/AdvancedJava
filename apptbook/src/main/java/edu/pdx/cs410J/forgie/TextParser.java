@@ -19,7 +19,7 @@ public class TextParser implements AppointmentBookParser{
     private String stringToParse;
     private String fileName;
     private Date date;
-    private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
+    private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
 
 
     /**
@@ -89,16 +89,20 @@ public class TextParser implements AppointmentBookParser{
        delimiter = "[$]";
        for(int i = 1; i < appts.length; i++){
             tokens = appts[i].split(delimiter);
+            try{
+                Description = tokens[1];
+                BeginDate = tokens[3];
+                EndDate = tokens[5];
 
-            Description = tokens[1];
-            BeginDate = tokens[3];
-            EndDate = tokens[5];
 
-            if(checkDateTimeFormat(BeginDate) && checkDateTimeFormat(EndDate)){
-                appointment = new Appointment(Description, BeginDate , EndDate);
-                appointmentBook.addAppointment(appointment);
-            }else{
-                throw new ParserException("File has a malformatted date.");
+                if(checkDateTimeFormat(BeginDate) && checkDateTimeFormat(EndDate)){
+                    appointment = new Appointment(Description, BeginDate , EndDate);
+                    appointmentBook.addAppointment(appointment);
+                }else{
+                    throw new ParserException("File has a malformatted date.");
+                }
+            }catch(ArrayIndexOutOfBoundsException ex){
+                throw new ParserException("Incomplete appointment.");
             }
         }
 

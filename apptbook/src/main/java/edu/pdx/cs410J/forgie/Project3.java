@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +25,7 @@ public class Project3 {
     static String endTime;
     static String textFile = "";
     static Date date;
-    static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
+    static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
     static AbstractAppointment appointment;
     static AbstractAppointmentBook appointmentBook = null;
 
@@ -71,7 +72,6 @@ public class Project3 {
       int count = args.length;
       format.setLenient(false);
 
-
         if(args.length > 0){
             if(args.length >= 3){
                 j = 3;
@@ -109,7 +109,7 @@ public class Project3 {
              readMe();
          }
      }
-     if(count > 6){
+     if(count > 8){
          clearScreen();
          System.err.println("Too many command line arguments.");
          printArgsEntered(args);
@@ -128,10 +128,14 @@ public class Project3 {
          case 3:
                 missingArgs += " begin time,";
          case 4:
-                missingArgs += " end date,";
+                missingArgs += " am/pm,";
          case 5:
+                missingArgs += " end date,";
+         case 6:
+                missingArgs += " end time,";
+         case 7:
              clearScreen();
-             System.err.println("Missing command line arguments: " + missingArgs + " end time");
+             System.err.println("Missing command line arguments: " + missingArgs + " am/pm");
              printArgsEntered(args);
              System.err.println(USAGE);
              System.exit(1);
@@ -140,16 +144,17 @@ public class Project3 {
 
         owner = args[start++];
         description = args[start++];
-        beginTime = args[start++] + " " + args[start++];
 
+        beginTime = args[start++] + " " + args[start++] + " " + args[start++];
 
         //Check that begin date is in correct format
         checkDateTimeFormat("Begin", beginTime);
 
 
-        endTime = args[start++] + " " + args[start];
 
 
+
+        endTime = args[start++] + " " + args[start++] + " " + args[start];
         //Check that end date is in correct format
         checkDateTimeFormat("End", endTime);
 
@@ -203,20 +208,20 @@ public class Project3 {
 
 
     /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0:00-23:59)
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
      *
      * @param string    Identify if this is the start date/time or end date/time
      * @param dateTime  The date/time that needs to be checked
      */
     static void checkDateTimeFormat(String string, String dateTime) {
-        try{
+       try{
             date = format.parse(dateTime);
-        }catch(ParseException ex){
+       }catch(ParseException ex){
             clearScreen();
             System.err.println(string + " date/time format is incorrect: " + dateTime
-                    + "\nShould be in the form: mm/dd/yyyy hh:mm (0:00-23:59)");
+                    + "\nShould be in the form: mm/dd/yyyy h:mm am/pm)");
             System.exit(1);
-        }
+       }
     }
 
 

@@ -53,4 +53,10 @@ public class TextDumper implements AppointmentBookDumper {
             output.close();
         }
     }
+
+
+
+
+
+
 }
