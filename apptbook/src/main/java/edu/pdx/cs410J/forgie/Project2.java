@@ -50,7 +50,8 @@ public class Project2 {
             "will be stored in an appointment book of an 'Owner' and then written to a file designated by the user. An\n" +
             "appointment book consists of the owners name and a linkked list of appointments. An appointment consists\n" +
             "of; a 'description' describing the appointment, a 'beginTime' indicating the start date and time of the\n" +
-            "appointment, and an 'endTime' indicating the date and time the appointment will end.";
+            "appointment, and an 'endTime' indicating the date and time the appointment will end. Just a name is needed\n" +
+            "for a textfile the .txt will be added regardless.";
 
 
     /**
