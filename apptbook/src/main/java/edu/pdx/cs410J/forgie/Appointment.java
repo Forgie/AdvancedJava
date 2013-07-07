@@ -49,6 +49,8 @@ public class Appointment extends AbstractAppointment{
      *
      * @return  returns the date and time as a string.
      */
+
+    //DateFormat.SHORT.
     @Override
     public String getBeginTimeString() {
         return BeginTime;

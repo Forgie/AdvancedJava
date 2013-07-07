@@ -10,8 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <code>Project1</code> is the main class for the CS410J Project 1 and
- * utilizes {@link Appointment} and {@link AppointmentBook}
+ * <code>Project2</code> is the main class for the CS410J Project 2 and
+ * utilizes {@link Appointment}, {@link AppointmentBook}, {@link TextDumper} and {@link TextParser}
+ * to store and read appointments in text files.
  *
  * @author Shawn Forgie
  */
@@ -45,11 +46,11 @@ public class Project2 {
     private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
             USAGE +
             "\n"+
-            "    Project1 parses 6-8 command line arguments that are used to create an appointment. The appointment\n" +
-            "will be stored in an appointment book of an 'Owner'. An appointment book consists of the owners name and\n" +
-            "a collection of appointments. An appointment consists of; a 'description' describing the appointment, a\n" +
-            "'beginTime' indicating the start date and time of the appointment, and an 'endTime' indicating the date\n" +
-            "and time the appointment will end.";
+            "    Project2 parses 6-10 command line arguments that are used to create an appointment. The appointment\n" +
+            "will be stored in an appointment book of an 'Owner' and then written to a file designated by the user. An\n" +
+            "appointment book consists of the owners name and a linkked list of appointments. An appointment consists\n" +
+            "of; a 'description' describing the appointment, a 'beginTime' indicating the start date and time of the\n" +
+            "appointment, and an 'endTime' indicating the date and time the appointment will end.";
 
 
     /**
@@ -62,6 +63,7 @@ public class Project2 {
     public static void main(String[] args) {
 
       boolean print = false;
+      boolean filename = false;
       String missingArgs = "";
       int i, j = 0;
       int start = 0;
@@ -92,6 +94,7 @@ public class Project2 {
                 if(args[i].equals("-textFile")){
                     if(args.length > (i+1)){
                         textFile = args[++i];
+                        filename = true;
                         start += 2;
                     }
                 }
@@ -175,16 +178,16 @@ public class Project2 {
             System.exit(1);
         }
 
+        if(filename){
+            TextDumper textDumper = new TextDumper(textFile + ".txt");
 
-        TextDumper textDumper = new TextDumper(textFile + ".txt");
-
-        try{
-            textDumper.dump(appointmentBook);
-        }catch(IOException ex){
-            System.err.println("Appointment could not be written to " + textFile + ex.getMessage());
-            System.exit(0);
+            try{
+                textDumper.dump(appointmentBook);
+            }catch(IOException ex){
+                System.err.println("Appointment could not be written to " + textFile + ex.getMessage());
+                System.exit(0);
+            }
         }
-
 
 
         if(print){
