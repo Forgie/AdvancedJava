@@ -10,13 +10,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <code>Project2</code> is the main class for the CS410J Project 2 and
+ * <code>Project3</code> is the main class for the CS410J Project 2 and
  * utilizes {@link Appointment}, {@link AppointmentBook}, {@link TextDumper} and {@link TextParser}
  * to store and read appointments in text files.
  *
  * @author Shawn Forgie
  */
-public class Project2 {
+public class Project3 {
 
     static String owner;
     static String description;
@@ -46,7 +46,7 @@ public class Project2 {
     private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
             USAGE +
             "\n"+
-            "    Project2 parses 6-10 command line arguments that are used to create an appointment. The appointment\n" +
+            "    Project3 parses 6-10 command line arguments that are used to create an appointment. The appointment\n" +
             "will be stored in an appointment book of an 'Owner' and then written to a file designated by the user. An\n" +
             "appointment book consists of the owners name and a linkked list of appointments. An appointment consists\n" +
             "of; a 'description' describing the appointment, a 'beginTime' indicating the start date and time of the\n" +
