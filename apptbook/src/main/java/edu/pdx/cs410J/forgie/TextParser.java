@@ -1,13 +1,13 @@
 package edu.pdx.cs410J.forgie;
 
-import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookParser;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -15,84 +15,95 @@ import java.util.TreeMap;
  * Date: 7/5/13
  */
 public class TextParser implements AppointmentBookParser{
-   TreeMap<String, AbstractAppointment> map;
+    private String stringToParse;
+    private String fileName;
+    private Date date;
+    private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
 
-    public TextParser(String fileName){
-
-        try{
-            InputStream file = new FileInputStream(fileName);
-            InputStream buffer = new BufferedInputStream(file);
-            ObjectInput input = new ObjectInputStream(buffer);
-            try{
-                map = (TreeMap<String, AbstractAppointment>) input.readObject();
-
-            }catch(ClassNotFoundException ex){
-                System.err.println("Text file is malformatted");
-                System.exit(1);
-            }finally{
-                input.close();
-            }
-        }catch(FileNotFoundException ex){
-
-        }catch(IOException e){
-        }
+    public TextParser(String file){
+        this.fileName = file;
+        this.stringToParse = null;
 
 
-        System.out.println("HI");
     }
 
-
+    public boolean checkDateTimeFormat(String dateTime) {
+        format.setLenient(false);
+        try{
+            date = format.parse(dateTime);
+        }catch(ParseException ex){
+            return false;
+        }
+        return true;
+    }
 
     public AbstractAppointmentBook parse() throws ParserException {
-        /*
-        String text = "Beggars in Spain*Nancy Kress*1992";
-        StringTokenizer tokenizer = new StringTokenizer(text,"*");
-        String title = tokenizer.nextToken();
-        String author = tokenizer.nextToken();
-        String year = tokenizer.nextToken();
-        */
-        String Description;
-        String BeginTime;
-        String EndTime;
-        String Owner = "hi";
-        String [] appt = new String[10];
 
-        StringTokenizer tokenizer = new StringTokenizer(Owner, "[");
-        Owner = tokenizer.nextToken();
-        int i = 0;
-        while(tokenizer.hasMoreTokens()){
-            appt[i] = tokenizer.nextToken();
+        String line;
+        String Description;
+        String BeginDate;
+        String EndDate;
+        String Owner;
+        Appointment appointment;
+        AbstractAppointmentBook appointmentBook;
+
+        try{
+            BufferedReader input = new BufferedReader(new FileReader(this.fileName));
+            try{
+
+                    while((line = input.readLine()) != null){
+                            this.stringToParse += line;
+                    }
+
+                    if(this.stringToParse == null)
+                        return null;
+
+            }catch(IOException ex){
+                System.err.println("Could not read file.");
+                System.exit(1);
+            }
+        }catch(FileNotFoundException ex){
+            return null;
+        }
+
+
+        for(int i = 0; i < 80; ++i){
+            System.out.println();
         }
 
 
 
+        String delimiter = "[|]";
+        String [] tokens = stringToParse.split(delimiter);
+        Owner = tokens[1];
+        appointmentBook = new AppointmentBook(Owner);
 
-        return null;
+
+
+
+
+       String apptDelimiter = "[>]";
+
+       String [] appts = stringToParse.split(apptDelimiter);
+
+
+        delimiter = "[$]";
+        for(int i = 1; i < appts.length; i++){
+
+            tokens = appts[i].split(delimiter);
+
+            Description = tokens[1];
+            BeginDate = tokens[3];
+            EndDate = tokens[5];
+
+            if(checkDateTimeFormat(BeginDate) && checkDateTimeFormat(EndDate)){
+                appointment = new Appointment(Description, BeginDate , EndDate);
+                appointmentBook.addAppointment(appointment);
+            }else{
+                throw new ParserException("File has a malformatted date.");
+            }
+        }
+
+        return appointmentBook;
     }
 }
-
-
-
-        /*
-                //Restore providerDirectory Object
-        System.out.println("Restoring Provider Directory");
-        try{
-            //use buffering
-            InputStream file = new FileInputStream( "ProviderDirectory.ser" );
-            InputStream buffer = new BufferedInputStream( file );
-            ObjectInput input = new ObjectInputStream( buffer );
-            try{
-                map = (TreeMap<String,Provider>) input.readObject();
-            }
-            finally{
-                input.close();
-            }
-        }
-        catch(ClassNotFoundException ex){
-            System.out.println("Cannot perform input. Class not found.");
-        }
-        catch(IOException ex){
-            System.out.println("Cannot perform input.");
-            ex.printStackTrace();
-        }
-         */

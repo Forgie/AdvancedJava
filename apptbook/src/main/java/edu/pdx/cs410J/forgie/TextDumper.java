@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookDumper;
 
 import java.io.*;
+import java.util.Iterator;
 
 /**
  * <code>TextDumper</code> writes an appointment book to an external file designated by a user.
@@ -28,18 +29,30 @@ public class TextDumper implements AppointmentBookDumper {
      */
     public void dump(AbstractAppointmentBook book) throws IOException{
 
+        Iterator iterator = book.getAppointments().iterator();
+        AbstractAppointment element;
+        OutputStreamWriter output = null;
+
+
+        int count = 0;
         try{
-            System.out.println("Got here");
-            OutputStream file = new FileOutputStream(File);
-            OutputStreamWriter buffer = new OutputStreamWriter(file);
-            Writer writer = new BufferedWriter(buffer);
-            try{
-                writer.write(book.getOwnerName() + book.getAppointments());
-            }finally{
-                writer.close();
-            }
+            output = new OutputStreamWriter(new FileOutputStream(this.File));
+            output.write("OWNER NAME: |" + book.getOwnerName() + "|" +
+                         "\n\t******APPOINTMENTS******\n");
+
+            while(iterator.hasNext()){
+                element = (AbstractAppointment) iterator.next();
+                output.write("\n<" + ++count + ">" + "\nDescription: $" + element.getDescription() + "$" +
+                             "\nStarts: $" + element.getBeginTimeString() + "$" +
+                             "\nEnds: $" + element.getEndTimeString() + "$");
+                }
         }catch(IOException ex){
-            throw ex;
+                throw ex;
+        }finally{
+            if(output != null)
+            output.close();
         }
+
+
     }
 }

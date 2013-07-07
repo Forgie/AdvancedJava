@@ -3,9 +3,8 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This class represents an <code>AppointmentBook</code>. An appointment book has an owner and an appointment.
@@ -18,7 +17,7 @@ public class AppointmentBook extends AbstractAppointmentBook{
 
 
     private String owner;
-    private List<AbstractAppointment> list;
+    private LinkedList<AbstractAppointment> list;
 
     /**
      * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.
@@ -29,7 +28,7 @@ public class AppointmentBook extends AbstractAppointmentBook{
     public AppointmentBook(String name) {
         super();
         this.owner = name;
-        this.list = new ArrayList<AbstractAppointment>();
+        this.list = new LinkedList<AbstractAppointment> ();
     }
 
 

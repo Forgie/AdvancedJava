@@ -8,6 +8,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 /**
  * <code>Project1</code> is the main class for the CS410J Project 1 and
@@ -25,7 +26,7 @@ public class Project2 {
     static Date date;
     static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
     static AbstractAppointment appointment;
-    static AbstractAppointmentBook appointmentBook;
+    static AbstractAppointmentBook appointmentBook = null;
 
 
 
@@ -154,26 +155,28 @@ public class Project2 {
 
 
         TextParser textParser = new TextParser(textFile + ".txt");
-       /*
+
         try{
             appointmentBook = textParser.parse();
         }catch(ParserException ex){
-            System.err.println("Text file is malformatted");
+            System.err.println(ex.getMessage() + " Could not retrieve data.");
             System.exit(1);
         }
-        */
+
 
         appointment = new Appointment(description, beginTime, endTime);
-        appointmentBook = new AppointmentBook(owner);
-        appointmentBook.addAppointment(appointment);
+        if(appointmentBook == null){
+            appointmentBook = new AppointmentBook(owner);
+        }
 
+        appointmentBook.addAppointment(appointment);
 
         TextDumper textDumper = new TextDumper(textFile + ".txt");
 
         try{
             textDumper.dump(appointmentBook);
         }catch(IOException ex){
-            System.err.println("Appointment could not be written to " + textFile);
+            System.err.println("Appointment could not be written to " + textFile + ex.getMessage());
             System.exit(0);
         }
 
