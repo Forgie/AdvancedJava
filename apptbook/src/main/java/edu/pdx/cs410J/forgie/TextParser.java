@@ -39,8 +39,8 @@ public class TextParser implements AppointmentBookParser{
     /**
      * <code>parse</code> Reads input from a text file and creates Linked List of appointments.
      *
-     * @return <code>AbstractAppointmentBook</code>  An appointment book is generated and returned.
-     * @throws <code>ParserException</code>          If the text file is not formatted correctly and cannot be parsed an exception is thrown.
+     * @return AbstractAppointmentBook An appointment book is generated and returned.
+     * @throws ParserException         If the text file is not formatted correctly and cannot be parsed an exception is thrown.
      */
     public AbstractAppointmentBook parse() throws ParserException {
 

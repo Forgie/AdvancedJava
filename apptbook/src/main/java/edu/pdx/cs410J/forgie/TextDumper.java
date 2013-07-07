@@ -25,7 +25,7 @@ public class TextDumper implements AppointmentBookDumper {
      * Writes an Appointment Book to a specified file.
      *
      * @param book An appointment book to be stored in a specified file.
-     * @throws  <code>IOException</code>    Data cannot be written to the text file.
+     * @throws  IOException    Data cannot be written to the text file.
      */
     public void dump(AbstractAppointmentBook book) throws IOException{
 
