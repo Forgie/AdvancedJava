@@ -8,7 +8,6 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.NoSuchElementException;
 
 /**
  * <code>Project1</code> is the main class for the CS410J Project 1 and
@@ -51,10 +50,6 @@ public class Project2 {
             "a collection of appointments. An appointment consists of; a 'description' describing the appointment, a\n" +
             "'beginTime' indicating the start date and time of the appointment, and an 'endTime' indicating the date\n" +
             "and time the appointment will end.";
-
-
-
-
 
 
     /**
@@ -118,6 +113,7 @@ public class Project2 {
          System.exit(1);
      }
 
+     //Notify user which command line arguments are missing
      switch(count){
          case 0:
                 missingArgs = " owners name,";
@@ -165,11 +161,20 @@ public class Project2 {
 
 
         appointment = new Appointment(description, beginTime, endTime);
+
+        //check if need to initialize a new appointmentBook or have already read in data for one
         if(appointmentBook == null){
             appointmentBook = new AppointmentBook(owner);
         }
 
-        appointmentBook.addAppointment(appointment);
+        //Check that owners of appointment books are the same
+        if(owner.equals(appointmentBook.getOwnerName()))
+            appointmentBook.addAppointment(appointment);
+        else{
+            System.err.println("Owner Name in command line does not match existing Owner Name in " + textFile + ".txt");
+            System.exit(1);
+        }
+
 
         TextDumper textDumper = new TextDumper(textFile + ".txt");
 
@@ -210,6 +215,8 @@ public class Project2 {
         }
     }
 
+
+
     /**
      * Displays all command line arguments the user entered.
      * @param args      Command line arguments entered by user.
@@ -220,6 +227,7 @@ public class Project2 {
             System.out.println("\t" + arg);
         }
     }
+
 
 
     /**

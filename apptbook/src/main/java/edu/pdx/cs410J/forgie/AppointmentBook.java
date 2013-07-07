@@ -22,7 +22,7 @@ public class AppointmentBook extends AbstractAppointmentBook{
     /**
      * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.
      *
-     * @param name   A unique name identifying the owner of the appointment book
+     * @param name   A unique name identifying the owner of the appointment book.
      *
      */
     public AppointmentBook(String name) {
@@ -45,9 +45,9 @@ public class AppointmentBook extends AbstractAppointmentBook{
 
 
     /**
-     * <code>getOwnerName</code> gets the owners name and returns it as a string
+     * <code>getOwnerName</code> gets the owners name and returns it as a string.
      *
-     * @return   returns the name of whose appointment book is being accessed
+     * @return   returns the name of whose appointment book is being accessed.
      */
     @Override
     public String getOwnerName() {
@@ -58,9 +58,9 @@ public class AppointmentBook extends AbstractAppointmentBook{
 
 
     /**
-     * Gets the collection of appointments for an owner
+     * Gets the collection of appointments for an owner.
      *
-     * @return  returns the collection of appointments
+     * @return  returns the collection of appointments.
      */
     @Override
     public Collection getAppointments() {

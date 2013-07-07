@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * <code>TextParser</code> recieves a file name for a text file and tries to parse it into an Appointment book.
  *
  * @author Shawn Forgie
  * Date: 7/5/13
@@ -20,6 +21,12 @@ public class TextParser implements AppointmentBookParser{
     private Date date;
     private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy H:m");
 
+
+    /**
+     * Constructor for TextParser initializes the file name to access.
+     *
+     * @param file      The file name of a text file.
+     */
     public TextParser(String file){
         this.fileName = file;
         this.stringToParse = null;
@@ -27,16 +34,14 @@ public class TextParser implements AppointmentBookParser{
 
     }
 
-    public boolean checkDateTimeFormat(String dateTime) {
-        format.setLenient(false);
-        try{
-            date = format.parse(dateTime);
-        }catch(ParseException ex){
-            return false;
-        }
-        return true;
-    }
 
+
+    /**
+     * <code>parse</code> Reads input from a text file and creates Linked List of appointments.
+     *
+     * @return <code>AbstractAppointmentBook</code>  An appointment book is generated and returned.
+     * @throws <code>ParserException</code>          If the text file is not formatted correctly and cannot be parsed an exception is thrown.
+     */
     public AbstractAppointmentBook parse() throws ParserException {
 
         String line;
@@ -71,25 +76,18 @@ public class TextParser implements AppointmentBookParser{
             System.out.println();
         }
 
-
-
         String delimiter = "[|]";
         String [] tokens = stringToParse.split(delimiter);
         Owner = tokens[1];
         appointmentBook = new AppointmentBook(Owner);
-
-
-
-
 
        String apptDelimiter = "[>]";
 
        String [] appts = stringToParse.split(apptDelimiter);
 
 
-        delimiter = "[$]";
-        for(int i = 1; i < appts.length; i++){
-
+       delimiter = "[$]";
+       for(int i = 1; i < appts.length; i++){
             tokens = appts[i].split(delimiter);
 
             Description = tokens[1];
@@ -105,5 +103,22 @@ public class TextParser implements AppointmentBookParser{
         }
 
         return appointmentBook;
+    }
+
+
+
+    /**
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0:00-23:59)
+     *
+     * @param dateTime  The date/time that needs to be checked.
+     */
+    public boolean checkDateTimeFormat(String dateTime) {
+        format.setLenient(false);
+        try{
+            date = format.parse(dateTime);
+        }catch(ParseException ex){
+            return false;
+        }
+        return true;
     }
 }

@@ -19,9 +19,9 @@ public class Appointment extends AbstractAppointment{
      * regarding an appointment. {@link AppointmentBook}
      * then adds the appointment to a list of appointments.
      *
-     * @param description The description of an appointment
-     * @param beginTime   The date and time the appointment begins
-     * @param endTime     The date and time the appointment ends
+     * @param description The description of an appointment.
+     * @param beginTime   The date and time the appointment begins.
+     * @param endTime     The date and time the appointment ends.
      */
     public Appointment(String description, String beginTime, String endTime){
         super();
@@ -35,7 +35,7 @@ public class Appointment extends AbstractAppointment{
     /**
      *<code>getDescription</code> returns the description of the appointment.
      *
-     * @return  returns the description as a string
+     * @return  returns the description as a string.
      */
     @Override
     public String getDescription() {
@@ -47,7 +47,7 @@ public class Appointment extends AbstractAppointment{
     /**
      *<code>getBeginTimeString</code> returns the date and time an appointment is scheduled for.
      *
-     * @return  returns the date and time as a string
+     * @return  returns the date and time as a string.
      */
     @Override
     public String getBeginTimeString() {
@@ -59,7 +59,7 @@ public class Appointment extends AbstractAppointment{
     /**
      * <code>getEndTimeString</code> returns the date and time an appointment ends.
      *
-     * @return  returns the date and time as a string
+     * @return  returns the date and time as a string.
      */
     @Override
     public String getEndTimeString() {
