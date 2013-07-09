@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookDumper;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Iterator;
  * Date: 7/5/13
  */
 public class TextDumper implements AppointmentBookDumper {
-    String File;
+    private String File;
 
     public TextDumper(String fileName){
         this.File = fileName;

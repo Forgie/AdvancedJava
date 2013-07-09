@@ -4,7 +4,7 @@ import edu.pdx.cs410J.AbstractAppointment;
 
 import java.text.*;
 import java.util.*;
-
+import java.lang.Comparable;
 
 
 /**
@@ -106,23 +106,24 @@ public class Appointment extends AbstractAppointment{
     }
 
 
-    /*
-    /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0:00-23:59)
-     *
-     * @param dateTime  The date/time that needs to be converted into a date.
-     * @return          The string received into a properly formatted date.
+    public long getDuration(){
 
-    public Date checkDateTimeFormat(String dateTime) {
-        format.setLenient(false);
-        try{
-            date = format.parse(dateTime);
-        }catch(ParseException ex){
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-        return date;
+        long dur = getEndTime().getTime() - getBeginTime().getTime();
+
+
+
+        return dur/(1000 * 60);
     }
-    */
+
+
+
+    public Collection sortAppointmentByDateTimeOrDescription(){
+
+
+
+
+
+        return null;
+    }
 
 }

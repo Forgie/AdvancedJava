@@ -6,6 +6,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 import java.util.LinkedList;
 import java.util.Collection;
 
+
 /**
  * This class represents an <code>AppointmentBook</code>. An appointment book has an owner and an appointment.
  *
@@ -17,7 +18,7 @@ public class AppointmentBook extends AbstractAppointmentBook{
 
 
     private String owner;
-    private LinkedList<AbstractAppointment> list;
+    private Collection<AbstractAppointment> list;
 
     /**
      * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.

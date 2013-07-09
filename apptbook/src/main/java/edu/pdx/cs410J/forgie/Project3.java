@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 /**
  * <code>Project3</code> is the main class for the CS410J Project 2 and
@@ -73,6 +74,7 @@ public class Project3 {
       format.setLenient(false);
 
         if(args.length > 0){
+
             if(args.length >= 3){
                 j = 3;
             }else{
@@ -145,7 +147,12 @@ public class Project3 {
         owner = args[start++];
         description = args[start++];
 
+
+
+
         beginTime = args[start++] + " " + args[start++] + " " + args[start++];
+        //StringTokenizer token = new StringTokenizer(beginTime, "/:");
+
 
         //Check that begin date is in correct format
         checkDateTimeFormat("Begin", beginTime);
@@ -195,6 +202,13 @@ public class Project3 {
             }
         }
 
+        PrettyPrinter prettyPrinter = new PrettyPrinter(textFile + "prettyPrint.txt");
+        try{
+            prettyPrinter.dump(appointmentBook);
+        }catch(IOException ex){
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
 
         if(print){
             clearScreen();
