@@ -37,10 +37,10 @@ public class PrettyPrinter implements AppointmentBookDumper {
 
             while(iterator.hasNext()){
                 element = (Appointment) iterator.next();
-                output.write("\n<" + ++count + ">" + "\nDescription: " + element.getDescription() +
-                        "\nStarts: " + element.getBeginTime() +
-                        "\nEnds: " + element.getEndTime() +
-                        "\nDuration: " + element.getDuration() + " minutes");
+                output.write("\n<" + ++count + ">" + "\nDescription:\n\t" + element.getDescription() +
+                      "\n\nStarts:    " + element.getBeginTimeString() +
+                        "\nEnds:      " + element.getEndTimeString() +
+                        "\nDuration:  " + element.getDuration() + " minutes\n");
             }
         }catch(IOException ex){
             throw ex;

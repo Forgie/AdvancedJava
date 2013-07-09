@@ -38,8 +38,7 @@ public class TextDumper implements AppointmentBookDumper {
         int count = 0;
         try{
             output = new OutputStreamWriter(new FileOutputStream(this.File));
-            output.write("OWNER NAME: |" + book.getOwnerName() + "|" +
-                         "\n\t******APPOINTMENTS******\n");
+            output.write("OWNER NAME: |" + book.getOwnerName() + "|");
 
             while(iterator.hasNext()){
                 element = (AbstractAppointment) iterator.next();
