@@ -4,7 +4,7 @@ import edu.pdx.cs410J.AbstractAppointment;
 
 import java.text.*;
 import java.util.*;
-import java.lang.Comparable;
+//import java.lang.Comparable;
 
 
 /**
@@ -15,12 +15,12 @@ import java.lang.Comparable;
  */
 public class Appointment extends AbstractAppointment{
     private String Description;
-    private String BeginTime;
-    private String EndTime;
-    private Date StartTime;
-    private Date End;
-    static Date date;
-    static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+    private Date BeginTime;
+    private Date EndTime;
+    //private Date StartTime;
+    //private Date End;
+    //static Date date;
+    //static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
     /**
      * Creates a new <code>Appointment</code>.
      * This is the Appointment class that contains all the information
@@ -31,7 +31,7 @@ public class Appointment extends AbstractAppointment{
      * @param beginTime   The date and time the appointment begins.
      * @param endTime     The date and time the appointment ends.
      */
-    public Appointment(String description, String beginTime, String endTime){
+    public Appointment(String description, Date beginTime, Date endTime){
         super();
         this.Description = description;
         this.BeginTime = beginTime;
@@ -52,6 +52,7 @@ public class Appointment extends AbstractAppointment{
 
     @Override
     public Date getBeginTime(){
+        /*
         format.setLenient(false);
         try{
             StartTime = format.parse(BeginTime);
@@ -59,12 +60,13 @@ public class Appointment extends AbstractAppointment{
             System.err.println(ex.getMessage());
             System.exit(1);
         }
-
-        return StartTime;
+        */
+        return BeginTime;
     }
 
     @Override
     public Date getEndTime(){
+        /*
         format.setLenient(false);
         try{
             End = format.parse(EndTime);
@@ -72,8 +74,8 @@ public class Appointment extends AbstractAppointment{
             System.err.println(ex.getMessage());
             System.exit(1);
         }
-
-        return End;
+        */
+        return EndTime;
     }
     /**
      *<code>getBeginTimeString</code> returns the date and time an appointment is scheduled for.
@@ -116,7 +118,7 @@ public class Appointment extends AbstractAppointment{
     }
 
 
-
+   /*
     public Collection sortAppointmentByDateTimeOrDescription(){
 
 
@@ -125,5 +127,6 @@ public class Appointment extends AbstractAppointment{
 
         return null;
     }
+    */
 
 }

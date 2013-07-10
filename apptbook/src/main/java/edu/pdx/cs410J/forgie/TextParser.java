@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <code>TextParser</code> recieves a file name for a text file and tries to parse it into an Appointment book.
+ * <code>TextParser</code> receives a file name for a text file and tries to parse it into an Appointment book.
  *
  * @author Shawn Forgie
  * Date: 7/5/13
@@ -18,8 +18,7 @@ import java.util.Date;
 public class TextParser implements AppointmentBookParser{
     private String stringToParse;
     private String fileName;
-    private Date date;
-    private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+
 
 
     /**
@@ -94,13 +93,13 @@ public class TextParser implements AppointmentBookParser{
                 BeginDate = tokens[3];
                 EndDate = tokens[5];
 
-
-                if(checkDateTimeFormat(BeginDate) && checkDateTimeFormat(EndDate)){
-                    appointment = new Appointment(Description, BeginDate , EndDate);
-                    appointmentBook.addAppointment(appointment);
-                }else{
+                try{
+                    appointment = new Appointment(Description, checkDateTimeFormat(BeginDate) , checkDateTimeFormat(EndDate));
+                }catch(ParseException e){
                     throw new ParserException("File has a malformatted date.");
                 }
+                    appointmentBook.addAppointment(appointment);
+
             }catch(ArrayIndexOutOfBoundsException ex){
                 throw new ParserException("Incomplete appointment.");
             }
@@ -116,13 +115,10 @@ public class TextParser implements AppointmentBookParser{
      *
      * @param dateTime  The date/time that needs to be checked.
      */
-    public boolean checkDateTimeFormat(String dateTime) {
+    public Date checkDateTimeFormat(String dateTime) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         format.setLenient(false);
-        try{
-            date = format.parse(dateTime);
-        }catch(ParseException ex){
-            return false;
-        }
-        return true;
+
+        return format.parse(dateTime);
     }
 }

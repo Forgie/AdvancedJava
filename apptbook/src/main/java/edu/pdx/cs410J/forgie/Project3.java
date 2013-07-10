@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 /**
  * <code>Project3</code> is the main class for the CS410J Project 2 and
@@ -22,18 +21,19 @@ public class Project3 {
 
     static String owner;
     static String description;
-    static String beginTime;
-    static String endTime;
+    static String time;
+    static Date beginDate;
+    static Date endDate;
     static String textFile = "";
     static boolean print = false;
     static boolean filename = false;
     static boolean pretty = false;
     static boolean prettyFile = false;
     static String prettyFileName = "";
-    static Date date;
-    static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+
     static AbstractAppointment appointment;
     static AbstractAppointmentBook appointmentBook = null;
+    static PrettyPrinter prettyPrinter = null;
 
 
 
@@ -55,7 +55,7 @@ public class Project3 {
             "\n"+
             "    Project3 parses 6-10 command line arguments that are used to create an appointment. The appointment\n" +
             "will be stored in an appointment book of an 'Owner' and then written to a file designated by the user. An\n" +
-            "appointment book consists of the owners name and a linkked list of appointments. An appointment consists\n" +
+            "appointment book consists of the owners name and a linked list of appointments. An appointment consists\n" +
             "of; a 'description' describing the appointment, a 'beginTime' indicating the start date and time of the\n" +
             "appointment, and an 'endTime' indicating the date and time the appointment will end. Just a name is needed\n" +
             "for a textfile the .txt will be added regardless.";
@@ -73,10 +73,10 @@ public class Project3 {
 
 
       String missingArgs = "";
-      int i, j = 0;
+      int j = 0;
       int start = 0;
       int count = args.length;
-      format.setLenient(false);
+
 
 
         switch(args.length){
@@ -143,23 +143,15 @@ public class Project3 {
         owner = args[start++];
         description = args[start++];
 
-
-
-
-        beginTime = args[start++] + " " + args[start++] + " " + args[start++];
-        //StringTokenizer token = new StringTokenizer(beginTime, "/:");
-
+        time = args[start++] + " " + args[start++] + " " + args[start++];
 
         //Check that begin date is in correct format
-        checkDateTimeFormat("Begin", beginTime);
+        beginDate = checkDateTimeFormat("Begin", time);
 
+        time = args[start++] + " " + args[start++] + " " + args[start];
 
-
-
-
-        endTime = args[start++] + " " + args[start++] + " " + args[start];
         //Check that end date is in correct format
-        checkDateTimeFormat("End", endTime);
+        endDate = checkDateTimeFormat("End", time);
 
 
         TextParser textParser = new TextParser(textFile + ".txt");
@@ -172,7 +164,7 @@ public class Project3 {
         }
 
 
-        appointment = new Appointment(description, beginTime, endTime);
+        appointment = new Appointment(description, beginDate, endDate);
 
         //check if need to initialize a new appointmentBook or have already read in data for one
         if(appointmentBook == null){
@@ -198,13 +190,23 @@ public class Project3 {
             }
         }
 
-        PrettyPrinter prettyPrinter = new PrettyPrinter(textFile + "prettyPrint.txt");
-        try{
-            prettyPrinter.dump(appointmentBook);
-        }catch(IOException ex){
-            System.err.println(ex.getMessage());
-            System.exit(1);
+
+        if(prettyFile){
+            prettyPrinter = new PrettyPrinter(prettyFileName + ".txt");
+            try{
+                prettyPrinter.dump(appointmentBook);
+            }catch(IOException ex){
+                System.err.println(ex.getMessage());
+                System.exit(1);
+            }
         }
+
+
+        if(pretty){
+            prettyPrinter = new PrettyPrinter(null);
+                prettyPrinter.print(appointmentBook);
+        }
+
 
         if(print){
             clearScreen();
@@ -223,7 +225,11 @@ public class Project3 {
      * @param string    Identify if this is the start date/time or end date/time
      * @param dateTime  The date/time that needs to be checked
      */
-    static void checkDateTimeFormat(String string, String dateTime) {
+    static Date checkDateTimeFormat(String string, String dateTime) {
+       Date date = new Date();
+       DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+       format.setLenient(false);
+
        try{
             date = format.parse(dateTime);
        }catch(ParseException ex){
@@ -232,6 +238,7 @@ public class Project3 {
                     + "\nShould be in the form: mm/dd/yyyy h:mm am/pm)");
             System.exit(1);
        }
+        return date;
     }
 
 
@@ -305,6 +312,8 @@ public class Project3 {
                 }
             }
         }
+
+
         return start;
     }
 

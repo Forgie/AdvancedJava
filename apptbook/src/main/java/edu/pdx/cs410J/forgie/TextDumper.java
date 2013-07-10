@@ -1,11 +1,9 @@
 package edu.pdx.cs410J.forgie;
 
-import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookDumper;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -16,9 +14,11 @@ import java.util.Iterator;
  */
 public class TextDumper implements AppointmentBookDumper {
     private String File;
+    private StringBuilder builder;
 
     public TextDumper(String fileName){
         this.File = fileName;
+        this.builder = new StringBuilder();
     }
 
 
@@ -29,34 +29,41 @@ public class TextDumper implements AppointmentBookDumper {
      * @throws  IOException    Data cannot be written to the text file.
      */
     public void dump(AbstractAppointmentBook book) throws IOException{
-
-        Iterator iterator = book.getAppointments().iterator();
-        AbstractAppointment element;
         OutputStreamWriter output = null;
 
+        buildAppointmentFileString(book);
 
-        int count = 0;
         try{
             output = new OutputStreamWriter(new FileOutputStream(this.File));
-            output.write("OWNER NAME: |" + book.getOwnerName() + "|");
-
-            while(iterator.hasNext()){
-                element = (AbstractAppointment) iterator.next();
-                output.write("\n<" + ++count + ">" + "\nDescription: $" + element.getDescription() + "$" +
-                             "\nStarts: $" + element.getBeginTimeString() + "$" +
-                             "\nEnds: $" + element.getEndTimeString() + "$");
-                }
-        }catch(IOException ex){
-                throw ex;
-        }finally{
+            output.write(this.builder.toString());
+        } finally{
             if(output != null)
-            output.close();
+                output.close();
         }
+
     }
 
 
+    private void buildAppointmentFileString(AbstractAppointmentBook book) {
+        Iterator iterator = book.getAppointments().iterator();
+        Appointment element;
 
+        this.builder.append("OWNER NAME: |");
+        this.builder.append(book.getOwnerName());
+        this.builder.append("|");
+        int count = 0;
 
+        while(iterator.hasNext()){
+            element = (Appointment) iterator.next();
 
-
+            this.builder.append("\n<");
+            this.builder.append(++count);
+            this.builder.append(">\nDescription: $");
+            this.builder.append(element.getDescription());
+            this.builder.append("$\nStarts: $");
+            this.builder.append(element.getBeginTimeString());
+            this.builder.append("$\nEnds: $");
+            this.builder.append(element.getEndTimeString());
+        }
+    }
 }
