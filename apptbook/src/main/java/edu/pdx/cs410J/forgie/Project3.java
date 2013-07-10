@@ -25,6 +25,11 @@ public class Project3 {
     static String beginTime;
     static String endTime;
     static String textFile = "";
+    static boolean print = false;
+    static boolean filename = false;
+    static boolean pretty = false;
+    static boolean prettyFile = false;
+    static String prettyFileName = "";
     static Date date;
     static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
     static AbstractAppointment appointment;
@@ -45,7 +50,7 @@ public class Project3 {
             "  -textFile <filename>\n";
 
 
-    private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project1 [options] <args>\n" +
+    private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project3 [options] <args>\n" +
             USAGE +
             "\n"+
             "    Project3 parses 6-10 command line arguments that are used to create an appointment. The appointment\n" +
@@ -65,52 +70,43 @@ public class Project3 {
      */
     public static void main(String[] args) {
 
-      boolean print = false;
-      boolean filename = false;
+
+
       String missingArgs = "";
       int i, j = 0;
       int start = 0;
       int count = args.length;
       format.setLenient(false);
 
-        if(args.length > 0){
 
-            if(args.length >= 3){
+        switch(args.length){
+            case 0:
+                break;
+            case 1:
+                j = 1;
+                break;
+            case 2:
+                j = 2;
+                break;
+            case 3:
                 j = 3;
-            }else{
-                if(args.length == 2){
-                    j = 2;
-                }else{
-                    if(args.length == 1)
-                    j = 1;
-                }
-            }
-            //check for options at start
-            for(i = 0; i < j; i++){
-                if(args[i].equals("-print")){
-                    print = true;
-                    ++start;
-                }
-                if(args[i].equals("-README")){
-                    readMe();
-                }
-                if(args[i].equals("-textFile")){
-                    if(args.length > (i+1)){
-                        textFile = args[++i];
-                        filename = true;
-                        start += 2;
-                    }
-                }
-            }
-            if(start > 0)
-                count = args.length - start;
+                break;
+            default:
+                j = 4;
         }
 
-     if(args.length > 3){
-         if(args[3].equals("-README")){
+        start = checkOptionsSelected(args, j, start);
+
+        if(start > 0)
+            count = args.length - start;
+
+     if(args.length > 6){
+         if(args[5].equals("-README")){
              readMe();
          }
      }
+
+
      if(count > 8){
          clearScreen();
          System.err.println("Too many command line arguments.");
@@ -258,7 +254,7 @@ public class Project3 {
      */
     static void readMe() {
         clearScreen();
-        System.out.printf("%60s" , "Project1-README\n");
+        System.out.printf("%60s" , "Project3-README\n");
         System.out.printf("%100s", "Shawn Forgie\n\n");
         System.out.println(README);
         System.exit(0);
@@ -273,4 +269,44 @@ public class Project3 {
             System.out.println();
         }
     }
+
+
+    private static int checkOptionsSelected(String [] args, int j, int start){
+        int i;
+        //check for options at start
+        for(i = 0; i < j; i++){
+            if(args[i].equals("-README")){
+                readMe();
+            }else{
+                if(args[i].equals("-print")){
+                    print = true;
+                    ++start;
+                }else{
+                    if(args[i].equals("-textFile")){
+                        if(args.length > (i + 1)){
+                            textFile = args[++i];
+                            filename = true;
+                            start += 2;
+                        }
+                    }else{
+                        if(args[i].equals("-pretty")){
+                            if(args.length > (i + 1)){
+                                if(args[++i].equals("-")){
+                                    pretty = true;
+                                    start += 2;
+                                }else{
+                                    prettyFile = true;
+                                    prettyFileName = args[i];
+                                    start += 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return start;
+    }
+
+
 }
