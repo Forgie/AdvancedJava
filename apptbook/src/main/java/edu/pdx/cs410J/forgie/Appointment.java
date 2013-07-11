@@ -14,7 +14,8 @@ import java.util.*;
  *  @author Shawn Forgie
  *  Date: 7/4/13
  */
-public class Appointment extends AbstractAppointment implements Comparable{
+public class Appointment extends AbstractAppointment implements Comparable
+{
     private String Description;
     private Date BeginTime;
     private Date EndTime;
@@ -30,7 +31,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @param beginTime   The date and time the appointment begins.
      * @param endTime     The date and time the appointment ends.
      */
-    public Appointment(String description, Date beginTime, Date endTime){
+    public Appointment(String description, Date beginTime, Date endTime)
+    {
         super();
         this.Description = description;
         this.BeginTime = beginTime;
@@ -45,7 +47,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @return  returns the description as a string.
      */
     @Override
-    public String getDescription() {
+    public String getDescription()
+    {
         return Description;
     }
 
@@ -57,8 +60,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @return <code>BeginTime</code>     The time an appointment begins is returned.
      */
     @Override
-    public Date getBeginTime(){
-
+    public Date getBeginTime()
+    {
         return BeginTime;
     }
 
@@ -69,8 +72,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @return <code>EndTime</code>     The time an appointment ends is returned.
      */
     @Override
-    public Date getEndTime(){
-
+    public Date getEndTime()
+    {
         return EndTime;
     }
 
@@ -82,8 +85,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @return  returns the date and time as a string.
      */
     @Override
-    public String getBeginTimeString() {
-
+    public String getBeginTimeString()
+    {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getBeginTime());
     }
 
@@ -95,8 +98,8 @@ public class Appointment extends AbstractAppointment implements Comparable{
      * @return  returns the date and time as a string.
      */
     @Override
-    public String getEndTimeString() {
-
+    public String getEndTimeString()
+    {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getEndTime());
     }
 
@@ -108,18 +111,16 @@ public class Appointment extends AbstractAppointment implements Comparable{
      *
      * @return duration     The time difference between the start and end time in minutes.
      */
-    public long getDuration(){
-
+    public long getDuration()
+    {
         long dur = getEndTime().getTime() - getBeginTime().getTime();
-
-
 
         return dur/(1000 * 60);
     }
 
 
-    public int compareTo(Object o) {
-
+    public int compareTo(Object o)
+    {
         return 0;
     }
 }

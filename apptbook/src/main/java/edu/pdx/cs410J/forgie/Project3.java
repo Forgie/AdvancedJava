@@ -17,24 +17,27 @@ import java.util.Date;
  *
  * @author Shawn Forgie
  */
-public class Project3 {
-
+public class Project3
+{
     static String owner;
     static String description;
     static String time;
+
+    static String textFile = "";
+    static String prettyFileName = "";
+
     static Date beginDate;
     static Date endDate;
-    static String textFile = "";
+
     static boolean print = false;
     static boolean filename = false;
     static boolean pretty = false;
     static boolean prettyFile = false;
-    static String prettyFileName = "";
+
 
     static AbstractAppointment appointment;
     static AbstractAppointmentBook appointmentBook = null;
-    static PrettyPrinter prettyPrinter = null;
-
+    static PrettyPrinter prettyPrinter = new PrettyPrinter(null);
 
 
     static final String USAGE = "\nargs are (in this order):\n" +
@@ -62,6 +65,7 @@ public class Project3 {
             "for a textfile the .txt will be added regardless.";
 
 
+
     /**
      * Main method that parses command line arguments.
      * Creates appointments and appointment books for
@@ -69,155 +73,174 @@ public class Project3 {
      *
      * @param args  [options] -print, -README [arguments] Owner, Description, Begin Date, Begin Time, End Date, End Time
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        StringBuilder missingArgs = new StringBuilder();
+        int j = 0;
+        int start = 0;
+        int count = args.length;
 
-
-
-      String missingArgs = "";
-      int j = 0;
-      int start = 0;
-      int count = args.length;
-
-
-
-        switch(args.length){
-            case 0:
-                break;
-            case 1:
-                j = 1;
-                break;
-            case 2:
-                j = 2;
-                break;
-            case 3:
-                j = 3;
-                break;
-            default:
-                j = 4;
-        }
+        j = getPossibleNumberOfOptionsInCommandLineArguments(j, count);
 
         start = checkOptionsSelected(args, j, start);
 
-        if(start > 0)
-            count = args.length - start;
+        if(start > 0) count = args.length - start;
 
-     if(args.length > 6){
-         if(args[5].equals("-README")){
-             readMe();
-         }
-     }
+        if(count > 8) tooManyCommandLineArgumentsReceived(args);
 
-
-     if(count > 8){
-         clearScreen();
-         System.err.println("Too many command line arguments.");
-         printArgsEntered(args);
-         System.err.println(USAGE);
-         System.exit(1);
-     }
-
-     //Notify user which command line arguments are missing
-     switch(count){
-         case 0:
-                missingArgs = " owners name,";
-         case 1:
-                missingArgs += " description,";
-         case 2:
-                missingArgs += " begin date,";
-         case 3:
-                missingArgs += " begin time,";
-         case 4:
-                missingArgs += " am/pm,";
-         case 5:
-                missingArgs += " end date,";
-         case 6:
-                missingArgs += " end time,";
-         case 7:
-             clearScreen();
-             System.err.println("Missing command line arguments: " + missingArgs + " am/pm");
-             printArgsEntered(args);
-             System.err.println(USAGE);
-             System.exit(1);
-     }
-
+        printMissingArgumentsToStandardOut(args, missingArgs, count);        //Notify user which command line arguments are missing
 
         owner = args[start++];
         description = args[start++];
-
         time = args[start++] + " " + args[start++] + " " + args[start++];
-
-        //Check that begin date is in correct format
-        beginDate = checkDateTimeFormat("Begin", time);
-
+        beginDate = checkDateTimeFormat("Begin", time);                     //Check that begin date is in correct format
         time = args[start++] + " " + args[start++] + " " + args[start];
+        endDate = checkDateTimeFormat("End", time);                         //Check that end date is in correct format
 
-        //Check that end date is in correct format
-        endDate = checkDateTimeFormat("End", time);
-
-
-        TextParser textParser = new TextParser(textFile + ".txt");
-
-        try{
-            appointmentBook = textParser.parse();
-        }catch(ParserException ex){
-            System.err.println(ex.getMessage() + " Could not retrieve data.");
-            System.exit(1);
-        }
-
+        populateAppointmentBookWithExistingAppointmentsFromFile();
 
         appointment = new Appointment(description, beginDate, endDate);
 
+        compareExistingOwnerNameAndOwnerNameFromCommandLine();
+
+        if(filename) writeAppointmentBookToATextFile();
+
+        if(prettyFile) writeAppointmentBookInPrettyFormatToATextFile();
+
+        if(pretty) prettyPrinter.print(appointmentBook);
+
+        if(print) System.out.println(appointment.toString());
+
+        System.exit(0);
+    }
+
+
+
+
+    private static void compareExistingOwnerNameAndOwnerNameFromCommandLine()
+    {
         //check if need to initialize a new appointmentBook or have already read in data for one
-        if(appointmentBook == null){
-            appointmentBook = new AppointmentBook(owner);
-        }
+        if(appointmentBook == null) appointmentBook = new AppointmentBook(owner);
+
 
         //Check that owners of appointment books are the same
-        if(owner.equals(appointmentBook.getOwnerName()))
-            appointmentBook.addAppointment(appointment);
-        else{
+        if(owner.equals(appointmentBook.getOwnerName())) appointmentBook.addAppointment(appointment);
+        else
+        {
             System.err.println("Owner Name in command line does not match existing Owner Name in " + textFile + ".txt");
             System.exit(1);
         }
-
-        if(filename){
-            TextDumper textDumper = new TextDumper(textFile + ".txt");
-
-            try{
-                textDumper.dump(appointmentBook);
-            }catch(IOException ex){
-                System.err.println("Appointment could not be written to " + textFile + ex.getMessage());
-                System.exit(0);
-            }
-        }
+    }
 
 
-        if(prettyFile){
-            prettyPrinter = new PrettyPrinter(prettyFileName + ".txt");
-            try{
-                prettyPrinter.dump(appointmentBook);
-            }catch(IOException ex){
-                System.err.println(ex.getMessage());
+
+
+    private static void tooManyCommandLineArgumentsReceived(String[] args)
+    {
+        clearScreen();
+        System.err.println("Too many command line arguments.");
+        printArgsEntered(args);
+        System.err.println(USAGE);
+        System.exit(1);
+    }
+
+
+
+    private static void printMissingArgumentsToStandardOut(String[] args, StringBuilder missingArgs, int count)
+    {
+        switch(count)
+        {
+            case 0:
+                   missingArgs.append(" owners name,");
+            case 1:
+                   missingArgs.append(" description,");
+            case 2:
+                   missingArgs.append(" begin date,");
+            case 3:
+                   missingArgs.append(" begin time,");
+            case 4:
+                   missingArgs.append(" am/pm,");
+            case 5:
+                   missingArgs.append(" end date,");
+            case 6:
+                   missingArgs.append(" end time,");
+            case 7:
+                clearScreen();
+                System.err.println("Missing command line arguments: " + missingArgs + " am/pm");
+                printArgsEntered(args);
+                System.err.println(USAGE);
                 System.exit(1);
-            }
         }
+    }
 
 
-        if(pretty){
-            prettyPrinter = new PrettyPrinter(null);
-                prettyPrinter.print(appointmentBook);
+
+
+    private static void populateAppointmentBookWithExistingAppointmentsFromFile()
+    {
+        TextParser textParser = new TextParser(textFile + ".txt");
+
+        try {
+            appointmentBook = textParser.parse();
+        } catch (ParserException ex) {
+            System.err.println(ex.getMessage() + " Could not retrieve data.");
+            System.exit(1);
         }
+    }
 
 
-        if(print){
-            clearScreen();
-            System.out.println(appointment.toString());
+
+
+    private static void writeAppointmentBookInPrettyFormatToATextFile()
+    {
+        clearScreen();
+        prettyPrinter = new PrettyPrinter(prettyFileName + ".txt");
+        try {
+            prettyPrinter.dump(appointmentBook);
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+            System.exit(1);
         }
+    }
 
 
 
-        System.exit(0);
-  }
+
+    private static void writeAppointmentBookToATextFile()
+    {
+        TextDumper textDumper = new TextDumper(textFile + ".txt");
+
+        try {
+            textDumper.dump(appointmentBook);
+        } catch(IOException ex) {
+            System.err.println("Appointment could not be written to " + textFile + ex.getMessage());
+            System.exit(0);
+        }
+    }
+
+
+
+    private static int getPossibleNumberOfOptionsInCommandLineArguments(int j, int count)
+    {
+        switch(count)
+        {
+            case 0:
+              break;
+            case 1:
+                j = 1;
+                  break;
+            case 2:
+                j = 2;
+                  break;
+            case 3:
+                j = 3;
+                  break;
+            default:
+                  j = 4;
+        }
+        return j;
+    }
+
 
 
     /**
@@ -226,14 +249,15 @@ public class Project3 {
      * @param string    Identify if this is the start date/time or end date/time
      * @param dateTime  The date/time that needs to be checked
      */
-    static Date checkDateTimeFormat(String string, String dateTime) {
+    static Date checkDateTimeFormat(String string, String dateTime)
+    {
        Date date = new Date();
        DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
        format.setLenient(false);
 
-       try{
+       try {
             date = format.parse(dateTime);
-       }catch(ParseException ex){
+       } catch(ParseException ex) {
             clearScreen();
             System.err.println(string + " date/time format is incorrect: " + dateTime
                     + "\nShould be in the form: mm/dd/yyyy h:mm am/pm)");
@@ -248,9 +272,11 @@ public class Project3 {
      * Displays all command line arguments the user entered.
      * @param args      Command line arguments entered by user.
      */
-    private static void printArgsEntered(String[] args) {
+    private static void printArgsEntered(String[] args)
+    {
         System.out.println("You entered:");
-        for (String arg : args) {
+        for (String arg : args)
+        {
             System.out.println("\t" + arg);
         }
     }
@@ -260,7 +286,8 @@ public class Project3 {
     /**
      * Prints a brief, concise, and nicely-formatted textual description of what project1 does.
      */
-    static void readMe() {
+    static void readMe()
+    {
         clearScreen();
         System.out.printf("%60s" , "Project3-README\n");
         System.out.printf("%100s", "Shawn Forgie\n\n");
@@ -269,40 +296,53 @@ public class Project3 {
     }
 
 
+
     /**
      * Clears the command line screen, makes it more readable.
      */
-    static void clearScreen() {
-        for(int i = 0; i <= 80; i++){
-            System.out.println();
-        }
+    static void clearScreen()
+    {
+        for(int i = 0; i <= 80; i++) System.out.println();
+
     }
 
 
-    private static int checkOptionsSelected(String [] args, int j, int start){
+
+    private static int checkOptionsSelected(String [] args, int j, int start)
+    {
         int i;
         //check for options at start
-        for(i = 0; i < j; i++){
-            if(args[i].equals("-README")){
-                readMe();
-            }else{
-                if(args[i].equals("-print")){
+        for(i = 0; i < j; i++)
+        {
+            if(args[i].equals("-README")) readMe();
+            else
+            {
+                if(args[i].equals("-print"))
+                {
                     print = true;
                     ++start;
-                }else{
-                    if(args[i].equals("-textFile")){
-                        if(args.length > (i + 1)){
+                }else
+                {
+                    if(args[i].equals("-textFile"))
+                    {
+                        if(args.length > (i + 1))
+                        {
                             textFile = args[++i];
                             filename = true;
                             start += 2;
                         }
-                    }else{
-                        if(args[i].equals("-pretty")){
-                            if(args.length > (i + 1)){
-                                if(args[++i].equals("-")){
+                    }else
+                    {
+                        if(args[i].equals("-pretty"))
+                        {
+                            if(args.length > (i + 1))
+                            {
+                                if(args[++i].equals("-"))
+                                {
                                     pretty = true;
                                     start += 2;
-                                }else{
+                                }else
+                                {
                                     prettyFile = true;
                                     prettyFileName = args[i];
                                     start += 2;
@@ -314,9 +354,8 @@ public class Project3 {
             }
         }
 
+        if(args.length > 6) if(args[5].equals("-README")) readMe();
 
         return start;
     }
-
-
 }

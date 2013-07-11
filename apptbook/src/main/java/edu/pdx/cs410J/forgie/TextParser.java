@@ -15,7 +15,8 @@ import java.util.Date;
  * @author Shawn Forgie
  * Date: 7/5/13
  */
-public class TextParser implements AppointmentBookParser{
+public class TextParser implements AppointmentBookParser
+{
     private String stringToParse;
     private String fileName;
 
@@ -26,7 +27,8 @@ public class TextParser implements AppointmentBookParser{
      *
      * @param file      The file name of a text file.
      */
-    public TextParser(String file){
+    public TextParser(String file)
+    {
         this.fileName = file;
         this.stringToParse = null;
 
@@ -41,73 +43,92 @@ public class TextParser implements AppointmentBookParser{
      * @return AbstractAppointmentBook An appointment book is generated and returned.
      * @throws ParserException         If the text file is not formatted correctly and cannot be parsed an exception is thrown.
      */
-    public AbstractAppointmentBook parse() throws ParserException {
+    public AbstractAppointmentBook parse() throws ParserException
+    {
+        AbstractAppointmentBook appointmentBook;
 
-        String line;
+        if (getStringToParseFromFile()) return null;
+
+        clearScreen();
+
+        appointmentBook = parseAppointmentBookStoredInAFile();
+
+        return appointmentBook;
+    }
+
+    private void clearScreen() {
+        for(int i = 0; i < 80; ++i) System.out.println();
+    }
+
+
+    private AbstractAppointmentBook parseAppointmentBookStoredInAFile() throws ParserException
+    {
+        String Owner;
+        AbstractAppointmentBook appointmentBook;
         String Description;
         String BeginDate;
         String EndDate;
-        String Owner;
         Appointment appointment;
-        AbstractAppointmentBook appointmentBook;
-
-        try{
-            BufferedReader input = new BufferedReader(new FileReader(this.fileName));
-            try{
-
-                    while((line = input.readLine()) != null){
-                            this.stringToParse += line;
-                    }
-
-                    if(this.stringToParse == null)
-                        return null;
-
-            }catch(IOException ex){
-                System.err.println("Could not read file.");
-                System.exit(1);
-            }
-        }catch(FileNotFoundException ex){
-            return null;
-        }
-
-
-        for(int i = 0; i < 80; ++i){
-            System.out.println();
-        }
 
         String delimiter = "[|]";
         String [] tokens = stringToParse.split(delimiter);
         Owner = tokens[1];
         appointmentBook = new AppointmentBook(Owner);
 
-       String apptDelimiter = "[>]";
+        String apptDelimiter = "[>]";
 
-       String [] appts = stringToParse.split(apptDelimiter);
+        String [] appts = stringToParse.split(apptDelimiter);
 
 
-       delimiter = "[$]";
-       for(int i = 1; i < appts.length; i++){
-            tokens = appts[i].split(delimiter);
-            try{
-                Description = tokens[1];
-                BeginDate = tokens[3];
-                EndDate = tokens[5];
+        delimiter = "[$]";
+        for(int i = 1; i < appts.length; i++)
+        {
+             tokens = appts[i].split(delimiter);
+             try {
+                 Description = tokens[1];
+                 BeginDate = tokens[3];
+                 EndDate = tokens[5];
 
-                try{
-                    appointment = new Appointment(Description, checkDateTimeFormat(BeginDate) , checkDateTimeFormat(EndDate));
-                }catch(ParseException e){
-                    throw new ParserException("File has a malformatted date.");
-                }
-                    appointmentBook.addAppointment(appointment);
+                 try {
+                     appointment = new Appointment(Description, checkDateTimeFormat(BeginDate) , checkDateTimeFormat(EndDate));
+                 } catch (ParseException e) {
+                     throw new ParserException("File has a malformatted date.");
+                 }
+                     appointmentBook.addAppointment(appointment);
 
-            }catch(ArrayIndexOutOfBoundsException ex){
-                throw new ParserException("Incomplete appointment.");
-            }
-        }
-
+             } catch (ArrayIndexOutOfBoundsException ex) {
+                 throw new ParserException("Incomplete appointment.");
+             }
+         }
         return appointmentBook;
     }
 
+
+
+
+    private boolean getStringToParseFromFile()
+    {
+        String line;
+        try {
+            BufferedReader input = new BufferedReader(new FileReader(this.fileName));
+            try {
+                    while((line = input.readLine()) != null)
+                    {
+                            this.stringToParse += line;
+                    }
+
+                    if(this.stringToParse == null)
+                        return true;
+
+            } catch (IOException ex) {
+                System.err.println("Could not read file.");
+                System.exit(1);
+            }
+        } catch (FileNotFoundException ex) {
+            return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -115,7 +136,8 @@ public class TextParser implements AppointmentBookParser{
      *
      * @param dateTime  The date/time that needs to be checked.
      */
-    public Date checkDateTimeFormat(String dateTime) throws ParseException {
+    public Date checkDateTimeFormat(String dateTime) throws ParseException
+    {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         format.setLenient(false);
 

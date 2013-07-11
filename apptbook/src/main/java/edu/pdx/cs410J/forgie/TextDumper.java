@@ -12,11 +12,13 @@ import java.util.Iterator;
  * @author Shawn Forgie
  * Date: 7/5/13
  */
-public class TextDumper implements AppointmentBookDumper {
+public class TextDumper implements AppointmentBookDumper
+{
     private String File;
     private StringBuilder builder;
 
-    public TextDumper(String fileName){
+    public TextDumper(String fileName)
+    {
         this.File = fileName;
         this.builder = new StringBuilder();
     }
@@ -28,19 +30,18 @@ public class TextDumper implements AppointmentBookDumper {
      * @param book An appointment book to be stored in a specified file.
      * @throws  IOException    Data cannot be written to the text file.
      */
-    public void dump(AbstractAppointmentBook book) throws IOException{
+    public void dump(AbstractAppointmentBook book) throws IOException
+    {
         OutputStreamWriter output = null;
 
         buildAppointmentFileString(book);
 
-        try{
+        try {
             output = new OutputStreamWriter(new FileOutputStream(this.File));
             output.write(this.builder.toString());
-        } finally{
-            if(output != null)
-                output.close();
+        } finally {
+            if(output != null) output.close();
         }
-
     }
 
 
@@ -49,7 +50,8 @@ public class TextDumper implements AppointmentBookDumper {
      * AppointmentBook into a string that can be written to a file.
      * @param book      An appointment book to be converted into a string.
      */
-    private void buildAppointmentFileString(AbstractAppointmentBook book) {
+    private void buildAppointmentFileString(AbstractAppointmentBook book)
+    {
         Iterator iterator = book.getAppointments().iterator();
         Appointment element;
 
@@ -58,7 +60,8 @@ public class TextDumper implements AppointmentBookDumper {
         this.builder.append("|");
         int count = 0;
 
-        while(iterator.hasNext()){
+        while(iterator.hasNext())
+        {
             element = (Appointment) iterator.next();
 
             this.builder.append("\n<");
