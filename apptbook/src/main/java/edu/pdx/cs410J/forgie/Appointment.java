@@ -14,7 +14,7 @@ import java.util.*;
  *  @author Shawn Forgie
  *  Date: 7/4/13
  */
-public class Appointment extends AbstractAppointment implements Comparable
+public class Appointment extends AbstractAppointment implements Comparable<AbstractAppointment>
 {
     private String Description;
     private Date BeginTime;
@@ -118,9 +118,32 @@ public class Appointment extends AbstractAppointment implements Comparable
         return dur/(1000 * 60);
     }
 
-
-    public int compareTo(Object o)
+    @Override
+    public int compareTo(AbstractAppointment appointment)
     {
+
+
+        switch(this.getBeginTime().compareTo(appointment.getBeginTime()))
+        {
+            case -1:
+                return -1;
+
+            case 0:
+                 switch(this.getEndTime().compareTo(appointment.getEndTime()))
+                 {
+                     case -1:
+                         return -1;
+                     case 0:
+                         return (this.getDescription().compareTo(appointment.getDescription()) + 1);
+                     case 1:
+                         return 1;
+                 }
+
+            case 1:
+                return 1;
+        }
+
+
         return 0;
     }
 }

@@ -3,6 +3,8 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Collection;
 
@@ -31,7 +33,7 @@ public class AppointmentBook extends AbstractAppointmentBook
     {
         super();
         this.owner = name;
-        this.list = new LinkedList<> ();
+        this.list = new LinkedList<AbstractAppointment> ();
     }
 
 
@@ -43,8 +45,24 @@ public class AppointmentBook extends AbstractAppointmentBook
     @Override
     public void addAppointment(AbstractAppointment appointment)
     {
-        //list.
-        this.list.add(appointment);
+        Iterator iterator = this.list.iterator();
+        Appointment element, temp;
+        if(iterator.hasNext())
+        {
+            while(iterator.hasNext())
+            {
+                element = (Appointment) iterator.next();
+
+                if(iterator.hasNext())
+                {
+                    temp = (Appointment) iterator.next();
+
+                    if(element.compareTo(temp) != 0) this.list.add(appointment);
+
+                }else  this.list.add(appointment);
+            }
+        }else this.list.add(appointment);
+
     }
 
 
