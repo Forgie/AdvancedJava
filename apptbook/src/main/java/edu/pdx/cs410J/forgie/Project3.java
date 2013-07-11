@@ -47,7 +47,8 @@ public class Project3 {
             "options are (at the beginning in any order):\n" +
             "  -print\n" +
             "  -README\n"  +
-            "  -textFile <filename>\n";
+            "  -textFile <filename>\n" +
+            "  -pretty <filename> or -\n";
 
 
     private static final String README = "usage: java edu.pdx.cs410J.<login-id>.Project3 [options] <args>\n" +

@@ -3,6 +3,8 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
+//import java.util.Collections;
+//import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Collection;
 
@@ -14,7 +16,7 @@ import java.util.Collection;
  *
  * Date: 7/4/13
  */
-public class AppointmentBook extends AbstractAppointmentBook{
+public class AppointmentBook extends AbstractAppointmentBook {
 
 
     private String owner;
@@ -29,7 +31,7 @@ public class AppointmentBook extends AbstractAppointmentBook{
     public AppointmentBook(String name) {
         super();
         this.owner = name;
-        this.list = new LinkedList<AbstractAppointment> ();
+        this.list = new LinkedList<> ();
     }
 
 
@@ -40,7 +42,10 @@ public class AppointmentBook extends AbstractAppointmentBook{
      */
     @Override
     public void addAppointment(AbstractAppointment appointment) {
+        //list.
+
         this.list.add(appointment);
+
     }
 
 

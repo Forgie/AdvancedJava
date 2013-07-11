@@ -111,7 +111,7 @@ public class TextParser implements AppointmentBookParser{
 
 
     /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm (0:00-23:59)
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm.
      *
      * @param dateTime  The date/time that needs to be checked.
      */

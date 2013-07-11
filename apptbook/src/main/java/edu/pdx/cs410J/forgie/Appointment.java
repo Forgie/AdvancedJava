@@ -5,6 +5,7 @@ import edu.pdx.cs410J.AbstractAppointment;
 import java.text.*;
 import java.util.*;
 //import java.lang.Comparable;
+//import java.util.Comparator;
 
 
 /**
@@ -13,14 +14,12 @@ import java.util.*;
  *  @author Shawn Forgie
  *  Date: 7/4/13
  */
-public class Appointment extends AbstractAppointment{
+public class Appointment extends AbstractAppointment implements Comparable{
     private String Description;
     private Date BeginTime;
     private Date EndTime;
-    //private Date StartTime;
-    //private Date End;
-    //static Date date;
-    //static DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+
+
     /**
      * Creates a new <code>Appointment</code>.
      * This is the Appointment class that contains all the information
@@ -50,33 +49,33 @@ public class Appointment extends AbstractAppointment{
         return Description;
     }
 
+
+
+    /**
+     * <code>getBeginTime</code> returns the date object storing the beginning time of an Appointment.
+     *
+     * @return <code>BeginTime</code>     The time an appointment begins is returned.
+     */
     @Override
     public Date getBeginTime(){
-        /*
-        format.setLenient(false);
-        try{
-            StartTime = format.parse(BeginTime);
-        }catch(ParseException ex){
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-        */
+
         return BeginTime;
     }
 
+
+    /**
+     * <code>getEndTime</code> returns the date object storing the end time of an Appointment.
+     *
+     * @return <code>EndTime</code>     The time an appointment ends is returned.
+     */
     @Override
     public Date getEndTime(){
-        /*
-        format.setLenient(false);
-        try{
-            End = format.parse(EndTime);
-        }catch(ParseException ex){
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-        */
+
         return EndTime;
     }
+
+
+
     /**
      *<code>getBeginTimeString</code> returns the date and time an appointment is scheduled for.
      *
@@ -84,10 +83,6 @@ public class Appointment extends AbstractAppointment{
      */
     @Override
     public String getBeginTimeString() {
-
-        //beginTime = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-            //getTimeInstance()
-        //StartTime = checkDateTimeFormat(BeginTime);
 
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getBeginTime());
     }
@@ -102,12 +97,17 @@ public class Appointment extends AbstractAppointment{
     @Override
     public String getEndTimeString() {
 
-        //endTime = DateFormat.getDateInstance(DateFormat.SHORT).format(date);
-
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(getEndTime());
     }
 
 
+
+    /**
+     * <code>getDuration</code> calculates the difference between begin and end times of an
+     * appointment and returns the number as a representation of the minutes.
+     *
+     * @return duration     The time difference between the start and end time in minutes.
+     */
     public long getDuration(){
 
         long dur = getEndTime().getTime() - getBeginTime().getTime();
@@ -118,15 +118,8 @@ public class Appointment extends AbstractAppointment{
     }
 
 
-   /*
-    public Collection sortAppointmentByDateTimeOrDescription(){
+    public int compareTo(Object o) {
 
-
-
-
-
-        return null;
+        return 0;
     }
-    */
-
 }

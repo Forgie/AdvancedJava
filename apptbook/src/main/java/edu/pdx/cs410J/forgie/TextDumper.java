@@ -44,6 +44,11 @@ public class TextDumper implements AppointmentBookDumper {
     }
 
 
+    /**
+     * <code>buildAppointmentFileString</code> turns the contents of an
+     * AppointmentBook into a string that can be written to a file.
+     * @param book      An appointment book to be converted into a string.
+     */
     private void buildAppointmentFileString(AbstractAppointmentBook book) {
         Iterator iterator = book.getAppointments().iterator();
         Appointment element;
