@@ -3,8 +3,6 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
-//import java.util.Collections;
-//import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Collection;
 
