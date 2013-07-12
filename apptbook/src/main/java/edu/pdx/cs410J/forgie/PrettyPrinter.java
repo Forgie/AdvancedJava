@@ -57,6 +57,7 @@ public class PrettyPrinter implements AppointmentBookDumper
     {
         buildAppointmentFileString(book);
         System.out.print(this.builder);
+        System.out.println("\n");
     }
 
 

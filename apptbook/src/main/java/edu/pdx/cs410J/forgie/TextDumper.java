@@ -72,6 +72,7 @@ public class TextDumper implements AppointmentBookDumper
             this.builder.append(element.getBeginTimeString());
             this.builder.append("$\nEnds: $");
             this.builder.append(element.getEndTimeString());
+            this.builder.append("$");
         }
     }
 }

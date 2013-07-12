@@ -8,7 +8,10 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <code>Project3</code> is the main class for the CS410J Project 2 and
@@ -103,6 +106,16 @@ public class Project3
 
         compareExistingOwnerNameAndOwnerNameFromCommandLine();
 
+        Collections.sort((List<Comparable>) appointmentBook.getAppointments());
+
+        completeOptionMethods();
+
+        System.exit(0);
+    }
+
+
+
+    private static void completeOptionMethods() {
         if(filename) writeAppointmentBookToATextFile();
 
         if(prettyFile) writeAppointmentBookInPrettyFormatToATextFile();
@@ -110,10 +123,7 @@ public class Project3
         if(pretty) prettyPrinter.print(appointmentBook);
 
         if(print) System.out.println(appointment.toString());
-
-        System.exit(0);
     }
-
 
 
 

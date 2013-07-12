@@ -4,8 +4,7 @@ import edu.pdx.cs410J.AbstractAppointment;
 
 import java.text.*;
 import java.util.*;
-//import java.lang.Comparable;
-//import java.util.Comparator;
+
 
 
 /**
@@ -118,14 +117,14 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
         return dur/(1000 * 60);
     }
 
+
     @Override
     public int compareTo(AbstractAppointment appointment)
     {
-
-
         switch(this.getBeginTime().compareTo(appointment.getBeginTime()))
         {
             case -1:
+
                 return -1;
 
             case 0:
@@ -134,7 +133,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
                      case -1:
                          return -1;
                      case 0:
-                         return (this.getDescription().compareTo(appointment.getDescription()) + 1);
+                         return (this.getDescription().compareTo(appointment.getDescription()));
                      case 1:
                          return 1;
                  }
@@ -144,6 +143,6 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
         }
 
 
-        return 0;
+        return -1;
     }
 }
