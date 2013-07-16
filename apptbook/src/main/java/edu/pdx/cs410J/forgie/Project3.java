@@ -8,10 +8,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <code>Project3</code> is the main class for the CS410J Project 2 and
@@ -102,11 +99,9 @@ public class Project3
 
         populateAppointmentBookWithExistingAppointmentsFromFile();
 
-        appointment = new Appointment(description, beginDate, endDate);
 
-        compareExistingOwnerNameAndOwnerNameFromCommandLine();
+        //Collections.sort((Map<Comparable>) appointmentBook.getAppointments());
 
-        Collections.sort((List<Comparable>) appointmentBook.getAppointments());
 
         completeOptionMethods();
 
@@ -127,19 +122,19 @@ public class Project3
 
 
 
-    private static void compareExistingOwnerNameAndOwnerNameFromCommandLine()
+    private static boolean compareExistingOwnerNameAndOwnerNameFromCommandLine()
     {
         //check if need to initialize a new appointmentBook or have already read in data for one
         if(appointmentBook == null) appointmentBook = new AppointmentBook(owner);
 
-
         //Check that owners of appointment books are the same
-        if(owner.equals(appointmentBook.getOwnerName())) appointmentBook.addAppointment(appointment);
-        else
+        if(!owner.equals(appointmentBook.getOwnerName()))
         {
-            System.err.println("Owner Name in command line does not match existing Owner Name in " + textFile + ".txt");
+            System.err.println("Owner Name from command line arguments does not match existing Owner Name in " + textFile + ".txt");
             System.exit(1);
-        }
+            return false;
+        } else return true;
+
     }
 
 
@@ -189,13 +184,21 @@ public class Project3
     private static void populateAppointmentBookWithExistingAppointmentsFromFile()
     {
         TextParser textParser = new TextParser(textFile + ".txt");
+        appointment = new Appointment(description, beginDate, endDate);
 
         try {
             appointmentBook = textParser.parse();
+            if(compareExistingOwnerNameAndOwnerNameFromCommandLine())
+                appointmentBook.addAppointment(appointment);
         } catch (ParserException ex) {
             System.err.println(ex.getMessage() + " Could not retrieve data.");
             System.exit(1);
         }
+
+
+
+
+
     }
 
 

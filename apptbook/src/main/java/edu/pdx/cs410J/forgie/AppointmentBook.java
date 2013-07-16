@@ -4,7 +4,7 @@ import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
 import java.util.*;
-
+import java.lang.*;
 
 /**
  * This class represents an <code>AppointmentBook</code>. An appointment book has an owner and an appointment.
@@ -16,7 +16,7 @@ import java.util.*;
 public class AppointmentBook extends AbstractAppointmentBook
 {
     private String owner;
-    private Collection<AbstractAppointment> list;
+    private SortedMap <String, AbstractAppointment> map;
 
 
 
@@ -30,7 +30,7 @@ public class AppointmentBook extends AbstractAppointmentBook
     {
         super();
         this.owner = name;
-        this.list = new ArrayList<> ();
+        this.map = new TreeMap <String, AbstractAppointment> ();
     }
 
 
@@ -42,9 +42,16 @@ public class AppointmentBook extends AbstractAppointmentBook
     @Override
     public void addAppointment(AbstractAppointment appointment)
     {
-        this.list.add(appointment);
-    }
+        StringBuilder sb = new StringBuilder();
+        sb.append(appointment.getBeginTimeString());
+        sb.append(appointment.getEndTimeString());
+        sb.append(appointment.getDescription());
 
+        this.map.put(sb.toString(), appointment);
+
+
+           //Collections.sort(this.list);
+    }
 
 
     /**
@@ -68,6 +75,7 @@ public class AppointmentBook extends AbstractAppointmentBook
     @Override
     public Collection getAppointments()
     {
-        return this.list;
+       // Collections.sort(this.list);
+        return (Collection) this.map.values();
     }
 }

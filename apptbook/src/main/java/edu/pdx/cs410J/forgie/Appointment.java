@@ -121,23 +121,22 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
     @Override
     public int compareTo(AbstractAppointment appointment)
     {
-        switch(this.getBeginTime().compareTo(appointment.getBeginTime()))
+        switch(getBeginTime().compareTo(appointment.getBeginTime()))
         {
             case -1:
-
-                return -1;
+                break;
 
             case 0:
-                 switch(this.getEndTime().compareTo(appointment.getEndTime()))
+                 switch(getEndTime().compareTo(appointment.getEndTime()))
                  {
                      case -1:
-                         return -1;
+                         break;
                      case 0:
-                         return (this.getDescription().compareTo(appointment.getDescription()));
+                         return (getDescription().compareToIgnoreCase(appointment.getDescription()));
                      case 1:
                          return 1;
                  }
-
+                break;
             case 1:
                 return 1;
         }
@@ -145,4 +144,5 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
 
         return -1;
     }
+
 }
