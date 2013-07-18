@@ -16,9 +16,7 @@ import java.lang.*;
 public class AppointmentBook extends AbstractAppointmentBook
 {
     private String owner;
-    private SortedMap <String, AbstractAppointment> map;
-
-
+    private Collection<Comparable<AbstractAppointment>> set;
 
     /**
      * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.
@@ -28,9 +26,8 @@ public class AppointmentBook extends AbstractAppointmentBook
      */
     public AppointmentBook(String name)
     {
-        super();
         this.owner = name;
-        this.map = new TreeMap <String, AbstractAppointment> ();
+        this.set = new TreeSet<Comparable<AbstractAppointment>>();
     }
 
 
@@ -42,15 +39,7 @@ public class AppointmentBook extends AbstractAppointmentBook
     @Override
     public void addAppointment(AbstractAppointment appointment)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append(appointment.getBeginTimeString());
-        sb.append(appointment.getEndTimeString());
-        sb.append(appointment.getDescription());
-
-        this.map.put(sb.toString(), appointment);
-
-
-           //Collections.sort(this.list);
+        this.set.add((Comparable<AbstractAppointment>) appointment);
     }
 
 
@@ -75,7 +64,6 @@ public class AppointmentBook extends AbstractAppointmentBook
     @Override
     public Collection getAppointments()
     {
-       // Collections.sort(this.list);
-        return (Collection) this.map.values();
+        return this.set;
     }
 }

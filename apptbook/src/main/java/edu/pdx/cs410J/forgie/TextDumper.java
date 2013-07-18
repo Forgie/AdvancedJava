@@ -4,8 +4,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookDumper;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <code>TextDumper</code> writes an appointment book to an external file designated by a user.
@@ -53,7 +52,6 @@ public class TextDumper implements AppointmentBookDumper
      */
     private void buildAppointmentFileString(AbstractAppointmentBook book)
     {
-
         Iterator iterator = book.getAppointments().iterator();
         Appointment element;
 
@@ -76,20 +74,5 @@ public class TextDumper implements AppointmentBookDumper
             this.builder.append(element.getEndTimeString());
             this.builder.append("$");
         }
-
-
-
-        /*
-        while(iterator.hasNext())
-        {
-            Map.Entry mEntry = (Map.Entry) iterator.next();
-            this.builder.append("\n<");
-            this.builder.append(++count);
-            this.builder.append(">\nDescription: $");
-            this.builder.append( mEntry.getValue().toString());
-            this.builder.append("$");
-
-        }
-        */
     }
 }

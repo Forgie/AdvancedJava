@@ -3,6 +3,12 @@ package edu.pdx.cs410J.forgie;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import edu.pdx.cs410J.InvokeMainTestCase;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -17,51 +23,28 @@ public class Project3Test extends InvokeMainTestCase {
         return invokeMain( Project3.class, args );
     }
 
-  /**
-   * Tests that invoking the main method with no arguments issues an error
-   */
-  @Test
-  public void NoCommandLineArgumentsPrintsMissingCommandLineArgsToStandardError() {
-    MainMethodResult result = invokeMain();
-    assertEquals(new Integer(1), result.getExitCode());
-    assertTrue(result.getErr().contains( "command line arguments"));
-  }
 
-  @Test
-  public void onlyOneArgumentPrintsMissingDescriptionToStandardError(){
-      MainMethodResult result = invokeMain("Owner");
-      assertEquals(new Integer(1), result.getExitCode());
-      assertTrue(result.getErr().contains( "description"));
-  }
+    /**
+     * Tests that two appointments are equal, when compareTo is called with equal appointments it should return 0
+     */
 
-    @Test
-    public void onlyTwoArgumentsPrintsMissingBeginDateToStandardError(){
-        MainMethodResult result = invokeMain("Owner", "Description");
-        assertEquals(new Integer(1), result.getExitCode());
-        assertTrue(result.getErr().contains("begin date"));
-    }
+    public void compareToOverriddenAndReturns0WhenTwoAppointmentsAreEqual()
+    {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
 
-    @Test
-    public void onlyThreeArgsPrintsMissingBeginTimeToStandardError(){
-        MainMethodResult result = invokeMain("Owner", "Description", "01/12/1989");
-        assertEquals(new Integer(1), result.getExitCode());
-        assertTrue(result.getErr().contains("begin time"));
+        Appointment appt1 = new Appointment("description", date, date);
+
+        Appointment appt2 = new Appointment("description", date, date);
+
+        int compare = appt1.compareTo(appt2);
+
+        assertEquals(compare, 0);
+
     }
 
 
-    @Test
-    public void onlyFourArgsPrintsMissingEndDateToStandardError(){
-        MainMethodResult result = invokeMain("Owner", "Description", "01/12/1989", "1:00");
-        assertEquals(new Integer(1), result.getExitCode());
-        assertTrue(result.getErr().contains("end date"));
-    }
 
-
-    @Test
-    public void onlyFiveArgsPrintsMissingEndTimeToStandardError(){
-        MainMethodResult result = invokeMain("Owner", "Description", "01/12/1989", "1:00", "01/12/1989");
-        assertEquals(new Integer(1), result.getExitCode());
-        assertTrue(result.getErr().contains("end time"));
-    }
 
 }

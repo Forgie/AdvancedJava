@@ -99,9 +99,9 @@ public class Project3
 
         populateAppointmentBookWithExistingAppointmentsFromFile();
 
+        appointment = new Appointment(description, beginDate, endDate);
 
-        //Collections.sort((Map<Comparable>) appointmentBook.getAppointments());
-
+        if(compareExistingOwnerNameAndOwnerNameFromCommandLine()) appointmentBook.addAppointment(appointment);
 
         completeOptionMethods();
 
@@ -184,21 +184,13 @@ public class Project3
     private static void populateAppointmentBookWithExistingAppointmentsFromFile()
     {
         TextParser textParser = new TextParser(textFile + ".txt");
-        appointment = new Appointment(description, beginDate, endDate);
 
         try {
             appointmentBook = textParser.parse();
-            if(compareExistingOwnerNameAndOwnerNameFromCommandLine())
-                appointmentBook.addAppointment(appointment);
         } catch (ParserException ex) {
             System.err.println(ex.getMessage() + " Could not retrieve data.");
             System.exit(1);
         }
-
-
-
-
-
     }
 
 

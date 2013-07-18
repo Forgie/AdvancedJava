@@ -32,7 +32,6 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
      */
     public Appointment(String description, Date beginTime, Date endTime)
     {
-        super();
         this.Description = description;
         this.BeginTime = beginTime;
         this.EndTime = endTime;
@@ -121,28 +120,53 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
     @Override
     public int compareTo(AbstractAppointment appointment)
     {
-        switch(getBeginTime().compareTo(appointment.getBeginTime()))
-        {
-            case -1:
-                break;
+        int b, e, d;
 
-            case 0:
-                 switch(getEndTime().compareTo(appointment.getEndTime()))
-                 {
-                     case -1:
-                         break;
-                     case 0:
-                         return (getDescription().compareToIgnoreCase(appointment.getDescription()));
-                     case 1:
-                         return 1;
-                 }
-                break;
-            case 1:
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+        format.setLenient(false);
+
+        Date begin = new Date();
+        Date end = new Date();
+        try{
+            begin = format.parse(getBeginTimeString());
+            end = format.parse(getEndTimeString());
+        }catch(ParseException ex){
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
+
+        b = begin.compareTo(appointment.getBeginTime());
+        e = end.compareTo(appointment.getEndTime());
+        d = getDescription().compareTo(appointment.getDescription());
+
+        if(b < 0)
+        {
+            return -1;
+        }else
+        {
+            if(b > 0)
+            {
                 return 1;
+            } else
+            {
+                if(e < 0)
+                {
+                    return -1;
+                }else{
+                    if(e > 0)
+                    {
+                        return 1;
+                    }else
+                    {
+                        if(d < 0) return -1;
+                        else if( d > 0) return 1;
+                        else return 0;
+                    }
+                }
+            }
         }
 
 
-        return -1;
     }
 
 }
