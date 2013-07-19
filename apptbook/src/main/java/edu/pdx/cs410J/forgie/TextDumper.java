@@ -10,17 +10,18 @@ import java.util.*;
  * <code>TextDumper</code> writes an appointment book to an external file designated by a user.
  *
  * @author Shawn Forgie
+ *
  * Date: 7/5/13
  */
 public class TextDumper implements AppointmentBookDumper
 {
     private String File;
-    private StringBuilder builder;
+    private StringBuilder sb;
 
     public TextDumper(String fileName)
     {
         this.File = fileName;
-        this.builder = new StringBuilder();
+        this.sb = new StringBuilder();
     }
 
 
@@ -38,7 +39,7 @@ public class TextDumper implements AppointmentBookDumper
 
         try {
             output = new OutputStreamWriter(new FileOutputStream(this.File));
-            output.write(this.builder.toString());
+            output.write(this.sb.toString());
         } finally {
             if(output != null) output.close();
         }
@@ -55,24 +56,24 @@ public class TextDumper implements AppointmentBookDumper
         Iterator iterator = book.getAppointments().iterator();
         Appointment element;
 
-        this.builder.append("OWNER NAME: |");
-        this.builder.append(book.getOwnerName());
-        this.builder.append("|");
+        this.sb.append("OWNER NAME: |");
+        this.sb.append(book.getOwnerName());
+        this.sb.append("|");
         int count = 0;
 
         while(iterator.hasNext())
         {
             element = (Appointment) iterator.next();
 
-            this.builder.append("\n<");
-            this.builder.append(++count);
-            this.builder.append(">\nDescription: $");
-            this.builder.append(element.getDescription());
-            this.builder.append("$\nStarts: $");
-            this.builder.append(element.getBeginTimeString());
-            this.builder.append("$\nEnds: $");
-            this.builder.append(element.getEndTimeString());
-            this.builder.append("$");
+            this.sb.append("\n<");
+            this.sb.append(++count);
+            this.sb.append(">\nDescription: $");
+            this.sb.append(element.getDescription());
+            this.sb.append("$\nStarts: $");
+            this.sb.append(element.getBeginTimeString());
+            this.sb.append("$\nEnds: $");
+            this.sb.append(element.getEndTimeString());
+            this.sb.append("$");
         }
     }
 }

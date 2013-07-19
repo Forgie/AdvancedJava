@@ -25,6 +25,7 @@ public class Project3
 
     static String textFile = "";
     static String prettyFileName = "";
+    static int start = 0;
 
     static Date beginDate;
     static Date endDate;
@@ -76,13 +77,12 @@ public class Project3
     public static void main(String[] args)
     {
         StringBuilder missingArgs = new StringBuilder();
-        int j = 0;
-        int start = 0;
+        int j;
         int count = args.length;
 
-        j = getPossibleNumberOfOptionsInCommandLineArguments(j, count);
+        j = getPossibleNumberOfOptionsInCommandLineArguments(count);
 
-        start = checkOptionsSelected(args, j, start);
+        checkOptionsSelected(args, j);
 
         if(start > 0) count = args.length - start;
 
@@ -109,7 +109,9 @@ public class Project3
     }
 
 
-
+    /**
+     * Call the appropriate methods when an option has been found in the command line arguments.
+     */
     private static void completeOptionMethods() {
         if(filename) writeAppointmentBookToATextFile();
 
@@ -121,7 +123,14 @@ public class Project3
     }
 
 
-
+    /**
+     * Once an appointmentBook is retrieved from a text file the name of the owner from the file and the owner name of
+     * the new appointment are compared. If they are the same return true otherwise Exit program and tell user names do
+     * not match.
+     *
+     * @return
+     *      returns true if owner names match.
+     */
     private static boolean compareExistingOwnerNameAndOwnerNameFromCommandLine()
     {
         //check if need to initialize a new appointmentBook or have already read in data for one
@@ -132,14 +141,19 @@ public class Project3
         {
             System.err.println("Owner Name from command line arguments does not match existing Owner Name in " + textFile + ".txt");
             System.exit(1);
-            return false;
-        } else return true;
 
+        }
+        return true;
     }
 
 
-
-
+    /**
+     * Notifies the user if too many command line arguments have been entered and exits after displaying the correct
+     * usage expected.
+     *
+     * @param args
+     *      The command line arguments entered by a user.
+     */
     private static void tooManyCommandLineArgumentsReceived(String[] args)
     {
         clearScreen();
@@ -150,7 +164,17 @@ public class Project3
     }
 
 
-
+    /**
+     * Prints missing command line arguments to the console notifying the user which arguments are missing specifically
+     * and displays the expected usage of the program.
+     *
+     * @param args
+     *      The command line arguments entered by a user.
+     * @param missingArgs
+     *      A stringbuilder to build the message identifying the missing command line arguments.
+     * @param count
+     *      The identifier for the switch statement based on the number of arguments from the command line.
+     */
     private static void printMissingArgumentsToStandardOut(String[] args, StringBuilder missingArgs, int count)
     {
         switch(count)
@@ -179,8 +203,9 @@ public class Project3
     }
 
 
-
-
+    /**
+     * Implements <code>TextParser</code> to read a text file and create an <code>AppointmentBook</code>.
+     */
     private static void populateAppointmentBookWithExistingAppointmentsFromFile()
     {
         TextParser textParser = new TextParser(textFile + ".txt");
@@ -194,8 +219,9 @@ public class Project3
     }
 
 
-
-
+    /**
+     * Writes an <code>AppointmentBook</code> to a text file in nice format by implementing <code>PrettyPrinter</code>.
+     */
     private static void writeAppointmentBookInPrettyFormatToATextFile()
     {
         clearScreen();
@@ -209,8 +235,9 @@ public class Project3
     }
 
 
-
-
+    /**
+     * Writes an <code>AppointmentBook</code> to a text file in a format that can be parsed by implementing <code>TextDumper</code>.
+     */
     private static void writeAppointmentBookToATextFile()
     {
         TextDumper textDumper = new TextDumper(textFile + ".txt");
@@ -224,10 +251,20 @@ public class Project3
     }
 
 
-
-    private static int getPossibleNumberOfOptionsInCommandLineArguments(int j, int count)
+    /**
+     * Finds the maximum number of options in the command line arguments and returns an integer.
+     *
+     *
+     * @param num
+     *      The number of command line arguments.
+     * @return
+     *      returns an integer identifying the maximum number of possible Options in the command line arguments.
+     */
+    private static int getPossibleNumberOfOptionsInCommandLineArguments(int num)
     {
-        switch(count)
+        int j = 0;
+
+        switch(num)
         {
             case 0:
               break;
@@ -251,8 +288,8 @@ public class Project3
     /**
      * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
      *
-     * @param string    Identify if this is the start date/time or end date/time
-     * @param dateTime  The date/time that needs to be checked
+     * @param string    Identify if this is the start date/time or end date/time.
+     * @param dateTime  The date/time that needs to be checked.
      */
     static Date checkDateTimeFormat(String string, String dateTime)
     {
@@ -312,8 +349,15 @@ public class Project3
     }
 
 
-
-    private static int checkOptionsSelected(String [] args, int j, int start)
+    /**
+     * Determines which options are selected and completes the necessary actions
+     *
+     * @param args
+     *      The command line arguments to search for option flags
+     * @param j
+     *      The maximum number of arguments to be seached for options
+     */
+    private static void checkOptionsSelected(String [] args, int j)
     {
         int i;
         //check for options at start
@@ -360,7 +404,5 @@ public class Project3
         }
 
         if(args.length > 6) if(args[5].equals("-README")) readMe();
-
-        return start;
     }
 }
