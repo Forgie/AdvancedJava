@@ -146,38 +146,37 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
 
         b = begin.compareTo(appointment.getBeginTime());
         e = end.compareTo(appointment.getEndTime());
-        d = getDescription().compareTo(appointment.getDescription());
+        d = getDescription().compareToIgnoreCase(appointment.getDescription());
 
-        if(b < 0)
+        if(b < 0)                           //New appointment has earlier begin date
         {
             return -1;
         }else
         {
-            if(b > 0)
+            if(b > 0)                       //Old appointment has earlier begin date
             {
                 return 1;
             } else
             {
-                if(e < 0)
+                if(e < 0)                   //New appointment has earlier end date
                 {
                     return -1;
                 }else{
-                    if(e > 0)
+                    if(e > 0)               //Old appointment has earlier end date
                     {
                         return 1;
                     }else
                     {
-                        if(d < 0)
+                        if(d < 0)           //New appointment has lower description
                         {
                             return -1;
-                        }
-                        else
+                        } else
                         {
-                            if( d > 0)
+                            if( d > 0)      //Old appointment has larger description
                             {
                                 return 1;
-                            }
-                            else return 0;
+                            } else
+                                return 0;   //Appointments are equal
                         }
                     }
                 }

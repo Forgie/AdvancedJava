@@ -19,7 +19,7 @@ public class AppointmentBook extends AbstractAppointmentBook
     private Collection<Comparable<AbstractAppointment>> set;
 
     /**
-     * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.
+     * Creates a new <code>AppointmentBook</code>, has a owner and set of appointments.
      *
      * @param name   A unique name identifying the owner of the appointment book.
      *
@@ -32,7 +32,7 @@ public class AppointmentBook extends AbstractAppointmentBook
 
 
     /**
-     *  <code>addAppointment</code> adds an appointment to the list of appointments for an appointment book.
+     *  <code>addAppointment</code> adds an appointment to the set of appointments for an appointment book.
      *
      * @param appointment   An appointment with all associated information (description, beginTime, endTime).
      */
