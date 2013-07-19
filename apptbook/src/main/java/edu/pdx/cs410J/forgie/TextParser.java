@@ -13,6 +13,7 @@ import java.util.Date;
  * <code>TextParser</code> receives a file name for a text file and tries to parse it into an Appointment book.
  *
  * @author Shawn Forgie
+ *
  * Date: 7/5/13
  */
 public class TextParser implements AppointmentBookParser
@@ -60,7 +61,14 @@ public class TextParser implements AppointmentBookParser
         for(int i = 0; i < 80; ++i) System.out.println();
     }
 
-
+    /**
+     * Parses the string created from <code>getStringToParseFromFile</code> and creates an <code>AppointmentBook</code>.
+     *
+     * @return
+     *      An AppointmentBook if the file is properly formatted and an <code>AppointmentBook</code> has been created.
+     * @throws ParserException
+     *      If the file is malformatted an exception is thrown.
+     */
     private AbstractAppointmentBook parseAppointmentBookStoredInAFile() throws ParserException
     {
         String Owner;
@@ -104,8 +112,12 @@ public class TextParser implements AppointmentBookParser
     }
 
 
-
-
+    /**
+     * Reads a text file and stores the text as a string using <code>StringBuilder</code>.
+     *
+     * @return
+     *      returns a boolean true if the file does not exist and false if a string is created.
+     */
     private boolean getStringToParseFromFile()
     {
         String line;
