@@ -3,8 +3,8 @@ package edu.pdx.cs410J.forgie;
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
-import java.util.LinkedList;
-import java.util.Collection;
+import java.util.*;
+import java.lang.*;
 
 /**
  * This class represents an <code>AppointmentBook</code>. An appointment book has an owner and an appointment.
@@ -13,11 +13,10 @@ import java.util.Collection;
  *
  * Date: 7/4/13
  */
-public class AppointmentBook extends AbstractAppointmentBook{
-
-
+public class AppointmentBook extends AbstractAppointmentBook
+{
     private String owner;
-    private LinkedList<AbstractAppointment> list;
+    private Collection<Comparable<AbstractAppointment>> set;
 
     /**
      * Creates a new <code>AppointmentBook</code>, has a owner and list of appointments.
@@ -25,10 +24,10 @@ public class AppointmentBook extends AbstractAppointmentBook{
      * @param name   A unique name identifying the owner of the appointment book.
      *
      */
-    public AppointmentBook(String name) {
-        super();
+    public AppointmentBook(String name)
+    {
         this.owner = name;
-        this.list = new LinkedList<AbstractAppointment> ();
+        this.set = new TreeSet<Comparable<AbstractAppointment>>();
     }
 
 
@@ -38,10 +37,10 @@ public class AppointmentBook extends AbstractAppointmentBook{
      * @param appointment   An appointment with all associated information (description, beginTime, endTime).
      */
     @Override
-    public void addAppointment(AbstractAppointment appointment) {
-        this.list.add(appointment);
+    public void addAppointment(AbstractAppointment appointment)
+    {
+        this.set.add((Comparable<AbstractAppointment>) appointment);
     }
-
 
 
     /**
@@ -50,8 +49,8 @@ public class AppointmentBook extends AbstractAppointmentBook{
      * @return   returns the name of whose appointment book is being accessed.
      */
     @Override
-    public String getOwnerName() {
-
+    public String getOwnerName()
+    {
         return this.owner;
     }
 
@@ -63,9 +62,8 @@ public class AppointmentBook extends AbstractAppointmentBook{
      * @return  returns the collection of appointments.
      */
     @Override
-    public Collection getAppointments() {
-
-        return this.list;
+    public Collection getAppointments()
+    {
+        return this.set;
     }
-
 }
