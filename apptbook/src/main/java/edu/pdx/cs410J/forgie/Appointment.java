@@ -11,6 +11,7 @@ import java.util.*;
  *  This class represents an <code>Appointment</code> and contains all objects defining an appointment.
  *
  *  @author Shawn Forgie
+ *
  *  Date: 7/4/13
  */
 public class Appointment extends AbstractAppointment implements Comparable<AbstractAppointment>
@@ -116,7 +117,15 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
         return dur/(1000 * 60);
     }
 
-
+    /**
+     * Compares two appointment books for sorting into a <code>TreeSet</code>.
+     *
+     * @param appointment
+     *      The appointment to be compared against.
+     * @return
+     *      An integer -1 if the appointment book should be before the one it is compared against, 0 if they are equal,
+     *      and 1 if the appointment book should be after the one it is compared against.
+     */
     @Override
     public int compareTo(AbstractAppointment appointment)
     {
@@ -158,9 +167,18 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
                         return 1;
                     }else
                     {
-                        if(d < 0) return -1;
-                        else if( d > 0) return 1;
-                        else return 0;
+                        if(d < 0)
+                        {
+                            return -1;
+                        }
+                        else
+                        {
+                            if( d > 0)
+                            {
+                                return 1;
+                            }
+                            else return 0;
+                        }
                     }
                 }
             }
