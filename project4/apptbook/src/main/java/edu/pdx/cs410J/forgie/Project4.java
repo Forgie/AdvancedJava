@@ -15,23 +15,55 @@ public class Project4 {
     public static final String MISSING_ARGS = "Missing command line arguments";
 
     public static void main(String... args) {
+        boolean host = false;
+        boolean port = false;
+        boolean search = false;
+        boolean print = false;
+        boolean README = false;
+
+
+
         String hostName = null;
         String portString = null;
         String key = null;
         String value = null;
+        String ownerName = null;
+        String description = null;
+        String beginDate = null;
+        String beginTime = null;
+        String beginAP = null;
+
 
         for (String arg : args) {
-            if (hostName == null) {
+            if(arg.equals("-README")) {
+               //Print README and exit.
+
+            }else if(!host && arg.equals("-host")) {
+                host = true;
+
+            }else if (host && hostName == null) {
                 hostName = arg;
 
-            } else if ( portString == null) {
+            }else if(!port && arg.equals("-port")) {
+                port = true;
+
+            }else if(port && portString == null) {
                 portString = arg;
 
-            } else if (key == null) {
-                key = arg;
+            }else if(!search) {
+                search = true;
 
-            } else if (value == null) {
-                value = arg;
+            }else if(search && ownerName == null) {
+                ownerName = arg;
+
+            }else if(search && beginDate == null) {
+                beginDate = arg;
+
+            } else if (ownerName == null) {
+                ownerName = arg;
+
+            } else if (description == null) {
+                description = arg;
 
             } else {
                 usage("Extraneous command line argument: " + arg);
@@ -45,16 +77,16 @@ public class Project4 {
             usage( "Missing port" );
         }
 
-        int port;
+        int portNum;
         try {
-            port = Integer.parseInt( portString );
+            portNum = Integer.parseInt( portString );
             
         } catch (NumberFormatException ex) {
             usage("Port \"" + portString + "\" must be an integer");
             return;
         }
 
-        AppointmentBookRestClient client = new AppointmentBookRestClient(hostName, port);
+        AppointmentBookRestClient client = new AppointmentBookRestClient(hostName, portNum);
 
         HttpRequestHelper.Response response;
         try {
