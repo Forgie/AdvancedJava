@@ -58,26 +58,6 @@ public class AppointmentBookServlet extends HttpServlet
 
 
 
-    private void searchOwnersAppointmentBookForDates(HttpServletResponse response, String name, String begin, String end) throws IOException {
-        initializeAppointmentBook(response, name);
-
-        //Need to make begin and end strings into proper date format.
-        Date start =  checkDateTimeStringFormat(response, "beginTime", begin);
-        Date finish = checkDateTimeStringFormat(response, "EndTime", end);
-
-
-        String search = getAppointmentsBetweenBeginTimeAndEndTime( start, finish);
-        if(search != null)
-        {
-            writeOwnerAndInfo(name,
-                          DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(start),
-                          DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(finish),
-                          response);
-
-            writeSearch(search, response);
-        }
-    }
-
 
     @Override
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
@@ -181,11 +161,11 @@ public class AppointmentBookServlet extends HttpServlet
 
 
 
-    private void writeOwnerAndInfo(String name, String begin, String end, HttpServletResponse response) throws IOException
+    private void writeOwnerAndInfo(String name, String begin, String end, HttpServletResponse response, String search) throws IOException
     {
         PrintWriter pw = response.getWriter();
 
-        pw.println(Messages.ownerAndInfo(name, begin, end));
+        pw.println(Messages.ownerAndInfo(name, begin, end, search));
         pw.flush();
 
         response.setStatus(HttpServletResponse.SC_OK);
@@ -266,28 +246,6 @@ public class AppointmentBookServlet extends HttpServlet
 
 
 
-    /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
-     *
-     * @param string    Identify if this is the start date/time or end date/time.
-     * @param dateTime  The date/time that needs to be checked.
-     */
-    static Date checkDateTimeStringFormat(HttpServletResponse response, String string, String dateTime)throws  IOException
-    {
-        Date date = new Date();
-        DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-        format.setLenient(false);
-
-        try {
-            date = format.parse(dateTime);
-        } catch(ParseException ex) {
-            PrintWriter pw = response.getWriter();
-            pw.println(Messages.malformattedDate(string, dateTime));
-        }
-        return date;
-    }
-
-
 
     public String getAppointmentsBetweenBeginTimeAndEndTime(Date beginDate, Date endDate)
     {
@@ -320,4 +278,72 @@ public class AppointmentBookServlet extends HttpServlet
 
         return sb.toString();
     }
+
+
+    private void searchOwnersAppointmentBookForDates(HttpServletResponse response, String name, String begin, String end) throws IOException {
+        initializeAppointmentBook(response, name);
+        PrintWriter pw = response.getWriter();
+        //Need to make begin and end strings into proper date format.
+        Date start;
+        Date finish;
+        String s;
+        String e;
+        try{
+            start =  checkDateTimeStringFormat(response, "beginTime", begin);
+            finish = checkDateTimeStringFormat(response, "EndTime", end);
+
+
+            s = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(start);
+            e = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(finish);
+
+
+
+            start = checkDateTimeFormat(s);
+            finish = checkDateTimeFormat(e);
+        }catch(ParseException ex)
+        {
+            pw.println(ex.getMessage());
+            pw.flush();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+
+
+
+        String search = getAppointmentsBetweenBeginTimeAndEndTime(start, finish);
+
+
+        if(search != null && !search.equals(""))
+        {
+
+            writeOwnerAndInfo(name, s, e, response, search);
+
+            // writeSearch(search, response);
+        }else{
+            pw.println(Messages.noAppointmentsBetweenTimes(name, s, e));
+        }
+
+    }
+
+
+
+
+    /**
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
+     *
+     * @param string    Identify if this is the start date/time or end date/time.
+     * @param dateTime  The date/time that needs to be checked.
+     */
+    static Date checkDateTimeStringFormat(HttpServletResponse response, String string, String dateTime)throws ParseException
+    {
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+        format.setLenient(false);
+
+        date = format.parse(dateTime);
+
+        return date;
+    }
+
 }

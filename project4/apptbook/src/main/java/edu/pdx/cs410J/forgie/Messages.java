@@ -38,13 +38,18 @@ public class Messages
         return String.format("%s", search);
     }
 
-    public static String ownerAndInfo(String name, String begin, String end)
+    public static String ownerAndInfo(String name, String begin, String end, String search)
     {
-        return String.format("\t%s has the following appointments between %s and %s\n", name, begin, end);
+        return String.format("\t%s has the following appointments between %s and %s\n\n%s", name, begin, end, search);
     }
 
     public static String noAppointmentBookForOwner(String name)
     {
         return String.format("An appointment book for %s does not exist.", name);
+    }
+
+    public static String noAppointmentsBetweenTimes(String name, String s, String e)
+    {
+        return String.format("%s has no appointments between %s and %s", name, s, e);
     }
 }

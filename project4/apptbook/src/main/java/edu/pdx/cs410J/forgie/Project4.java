@@ -17,7 +17,8 @@ import java.util.Date;
 public class Project4 {
     static String owner;
     static String description;
-    static String time;
+    static String begintime;
+    static String endtime;
     static String hostName = "";
     static int portNum;
 
@@ -68,10 +69,10 @@ public class Project4 {
 
         owner = args[start++];
         if(!search) description = args[start++];
-        time = args[start++] + " " + args[start++] + " " + args[start++];
-        beginDate = checkDateTimeFormat("Begin", time);                     //Check that begin date is in correct format
-        time = args[start++] + " " + args[start++] + " " + args[start];
-        endDate = checkDateTimeFormat("End", time);                         //Check that end date is in correct format
+        begintime = args[start++] + " " + args[start++] + " " + args[start++];
+        beginDate = checkDateTimeFormat("Begin", begintime);                     //Check that begin date is in correct format
+        endtime = args[start++] + " " + args[start++] + " " + args[start];
+        endDate = checkDateTimeFormat("End", endtime);                         //Check that end date is in correct format
 
         if(host)
         {
@@ -121,9 +122,11 @@ public class Project4 {
 
     private static HttpRequestHelper.Response getResponseFromSearchAction(AppointmentBookRestClient client) throws IOException {
         HttpRequestHelper.Response response;// seach for appointments between beginDate and EndDate
-        response = client.getAppointmentsBetweenDates(owner, beginDate.toString(), endDate.toString());
+        response = client.getAppointmentsBetweenDates(owner, begintime, endtime);
+
         checkResponseCode(HttpURLConnection.HTTP_OK, response);
 
+        clearScreen();
         System.out.println(response.getContent());
         return response;
     }
@@ -245,18 +248,26 @@ public class Project4 {
             {
                 print = true;
                 ++start;
-            }else if(args[i].equals("-host")) {
-                if(args.length > (i + 1)) {
+            }else if(args[i].equals("-host"))
+            {
+                if(args.length > (i + 1))
+                {
                     host = true;
                     hostName = args[++i];
                     start += 2;
                 }
-            }else if(args[i].equals("-port")) {
-                if(args.length > (i + 1)) {
+            }else if(args[i].equals("-port"))
+            {
+                if(args.length > (i + 1))
+                {
                     port = true;
                     portString = args[++i];
                     start += 2;
                 }
+            }else if(args[i].equals("-search"))
+            {
+                search = true;
+                ++start;
             }
         }
         if(args.length > 7) if(args[6].equals("-README")) readMe();
