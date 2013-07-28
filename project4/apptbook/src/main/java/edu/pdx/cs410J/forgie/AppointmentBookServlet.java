@@ -17,6 +17,8 @@ import java.util.*;
 public class AppointmentBookServlet extends HttpServlet
 {
       private final Map<String, String> data = new TreeMap<String, String>();
+      private final Map<String, AbstractAppointmentBook> d = new TreeMap<String, AbstractAppointmentBook>();
+
       AbstractAppointmentBook appointmentBook;
 
 
@@ -128,7 +130,7 @@ public class AppointmentBookServlet extends HttpServlet
     }
 
 
-
+    /*
     private void writeSearch(String search, HttpServletResponse response) throws IOException
     {
         PrintWriter pw = response.getWriter();
@@ -138,7 +140,7 @@ public class AppointmentBookServlet extends HttpServlet
 
         response.setStatus(HttpServletResponse.SC_OK);
     }
-
+       */
 
 
     private void writeValue( String name, HttpServletResponse response ) throws IOException
@@ -289,8 +291,8 @@ public class AppointmentBookServlet extends HttpServlet
         String s;
         String e;
         try{
-            start =  checkDateTimeStringFormat(response, "beginTime", begin);
-            finish = checkDateTimeStringFormat(response, "EndTime", end);
+            start =  checkDateTimeStringFormat(begin);
+            finish = checkDateTimeStringFormat(end);
 
 
             s = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(start);
@@ -332,12 +334,11 @@ public class AppointmentBookServlet extends HttpServlet
     /**
      * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
      *
-     * @param string    Identify if this is the start date/time or end date/time.
      * @param dateTime  The date/time that needs to be checked.
      */
-    static Date checkDateTimeStringFormat(HttpServletResponse response, String string, String dateTime)throws ParseException
+    static Date checkDateTimeStringFormat(String dateTime)throws ParseException
     {
-        Date date = new Date();
+        Date date;
         DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         format.setLenient(false);
 

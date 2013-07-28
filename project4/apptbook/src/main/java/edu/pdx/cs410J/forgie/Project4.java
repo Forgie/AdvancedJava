@@ -132,8 +132,17 @@ public class Project4 {
     }
 
     private static void completePrintOption() {
+
+        if(search && print)
+        {
+            System.out.printf("\n\nYou were searching for appointments with dates between %s and %s\n",
+                    DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(beginDate),
+                    DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(endDate));
+            return;
+        }
+
         Appointment appointment = new Appointment(description, beginDate, endDate);
-        if(print) System.out.println(appointment.toString());
+        if(print) System.out.println("\n\n" + appointment.toString() + "\n");
     }
 
     private static void getPortNumFromString() {
