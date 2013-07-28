@@ -25,24 +25,19 @@ public class AppointmentBookRestClient extends HttpRequestHelper
         this.url = String.format( "http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET );
     }
 
-    /**
-     * Returns all keys and values from the server
-     */
-    public Response getAllKeysAndValues() throws IOException
+
+    public Response addKeyValuePair( String owner, String apptBook ) throws IOException
     {
-        return get(this.url );
+        return post( this.url, "owner", owner, "appointmentBook" , apptBook);
     }
 
-    /**
-     * Returns all values for the given key
-     */
-    public Response getValues( String key ) throws IOException
+    public Response getAppointmentsBetweenDates(String owner, String begin, String end) throws IOException
     {
-        return get(this.url, "key", key);
+        return get(this.url, "owner", owner, "beginTime", begin, "endTime", end);
     }
 
-    public Response addKeyValuePair( String key, String value ) throws IOException
+    public Response addAppointment(String owner, String appointment) throws IOException
     {
-        return post( this.url, "key", key, "value", value );
+        return post(this.url, "owner", owner, "appointment", appointment);
     }
 }
