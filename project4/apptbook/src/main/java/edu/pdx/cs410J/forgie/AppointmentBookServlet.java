@@ -1,7 +1,6 @@
 package edu.pdx.cs410J.forgie;
 
 import edu.pdx.cs410J.AbstractAppointmentBook;
-import edu.pdx.cs410J.ParserException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,12 +15,17 @@ import java.util.*;
 
 public class AppointmentBookServlet extends HttpServlet
 {
-      private final Map<String, String> data = new TreeMap<String, String>();
-      private final Map<String, AbstractAppointmentBook> d = new TreeMap<String, AbstractAppointmentBook>();
+      private final Map<String, AbstractAppointmentBook> data = new TreeMap<String, AbstractAppointmentBook>();
 
       AbstractAppointmentBook appointmentBook;
 
-
+    /**
+     * Get an appointment book or a range of appointments from the server
+     * @param request The request from the client with the information to search for an appointment book or appointments within a given range
+     * @param response The message to be sent to the client
+     * @throws ServletException The serverlet has encountered something it cannot handle
+     * @throws IOException The response cannot be generated
+     */
     @Override
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
@@ -51,254 +55,74 @@ public class AppointmentBookServlet extends HttpServlet
                     if(end != null)
                     {
                         missingRequiredParameter(response, "beginTime");
-                    } else writeValue(name, response);
+                    } else writeAppointmentBook(name, response);
                 }
 
-            }else writeAllMappings(response);
+            }else writeAllOwners(response);
     }
 
 
-
-
-
+    /**
+     * Post an appointment to an appointment book on the server from a client
+     * @param request The request from the client with the information to make an appointment with
+     * @param response The message to be sent to the client
+     * @throws ServletException The serverlet has encountered something it cannot handle
+     * @throws IOException The response cannot be generated
+     */
     @Override
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         response.setContentType( "text/plain" );
 
         String name = getParameter("owner", request);
-        if(name == null)
+        if(name != null)
         {
-            missingRequiredParameter(response, "owner");
-            return;
-        }
+            String description = getParameter("description", request);
+            if(description != null)
+            {
+                String beginTime = getParameter("beginTime", request);
+                if(beginTime != null)
+                {
+                    String endTime = getParameter("endTime", request);
+                    if(endTime != null)
+                    {
+                        addAppointment(response, name, description, beginTime, endTime);
+                        response.setStatus( HttpServletResponse.SC_OK);
 
-        initializeAppointmentBook(response, name);
+                    }else missingRequiredParameter(response, "endTime");
 
-        String appt = getParameter("appointment", request);
-        if(appt == null)
-        {
-            missingRequiredParameter(response, "appointment");
-            return;
-        }
+                }else missingRequiredParameter(response, "beginTime");
 
-        addAppointment(response, appt);
-        PrettyPrinter prettyPrinter = new PrettyPrinter();
-        String apptbook = prettyPrinter.buildAppointmentFileString(appointmentBook);
+            }else missingRequiredParameter(response, "description");
 
-        this.data.put(name, apptbook);
-
-        response.setStatus( HttpServletResponse.SC_OK);
+        }else missingRequiredParameter(response, "owner");
     }
 
-
-
-
-
-    private void initializeAppointmentBook(HttpServletResponse response, String name) throws IOException
-    {
-        String apptbook = this.data.get(name);
-        if(apptbook != null){
-            TextParser textParser = new TextParser(apptbook);
-
-            try{
-                appointmentBook = textParser.parse();
-            }catch (ParserException ex){
-                malformattedAppointment(response);
-            }
-        }else appointmentBook = new AppointmentBook(name);
-    }
-
-
-
-
-    private void malformattedAppointment(HttpServletResponse response) throws  IOException
-    {
-        PrintWriter pw = response.getWriter();
-        pw.println(Messages.malformattedAppointment());
-    }
-
-
-
-    private void missingRequiredParameter( HttpServletResponse response, String key ) throws IOException
-    {
-        PrintWriter pw = response.getWriter();
-        pw.println( Messages.missingRequiredParameter(key));
-        pw.flush();
-        
-        response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED );
-    }
-
-
-    /*
-    private void writeSearch(String search, HttpServletResponse response) throws IOException
-    {
-        PrintWriter pw = response.getWriter();
-
-            pw.println(Messages.searchMessage(search));
-            pw.flush();
-
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
-       */
-
-
-    private void writeValue( String name, HttpServletResponse response ) throws IOException
-    {
-        String value = this.data.get(name);
-        PrintWriter pw = response.getWriter();
-
-        if(value != null)
-        {
-            pw.println(value);
-            pw.flush();
-            response.setStatus( HttpServletResponse.SC_OK );
-        } else {
-            pw.println(Messages.noAppointmentBookForOwner(name));
-            pw.flush();
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-        }
-    }
-
-
-
-
-    private void writeOwnerAndInfo(String name, String begin, String end, HttpServletResponse response, String search) throws IOException
-    {
-        PrintWriter pw = response.getWriter();
-
-        pw.println(Messages.ownerAndInfo(name, begin, end, search));
-        pw.flush();
-
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-
-
-
-    private void writeAllMappings( HttpServletResponse response) throws IOException
-    {
-        PrintWriter pw = response.getWriter();
-
-        pw.println(Messages.getMappingCount( data.size() ));
-
-        for (Map.Entry<String, String> entry : this.data.entrySet()) {
-           pw.println(Messages.formatAppointmentBook(entry.getKey()));
-        }
-
-        pw.flush();
-
-
-        response.setStatus( HttpServletResponse.SC_OK );
-
-    }
-
-
-
-    private String getParameter(String name, HttpServletRequest request)
-    {
-      String value = request.getParameter(name);
-      if (value == null || "".equals(value)) {
-        return null;
-
-      } else {
-        return value;
-      }
-    }
-
-
-
-
-    private void addAppointment(HttpServletResponse response, String appt)throws IOException
-    {
-        String [] tokens = appt.split("~");
-        String description = tokens[0];
-        String beginDate = tokens[1];
-        String endDate = tokens[2];
-        Appointment appointment;
-
-        try{
-            appointment = new Appointment(description, checkDateTimeFormat(beginDate), checkDateTimeFormat(endDate));
-        }catch (ParseException ex){
-            throw new IOException (ex.getMessage());
-        }
-
-        appointmentBook.addAppointment(appointment);
-
-        response.setStatus(HttpServletResponse.SC_OK);
-    }
 
 
 
     /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm.
-     *
-     * @param dateTime  The date/time that needs to be checked.
+     * Adds an appointment to the collection of appointments stored in an appointment book on the server
+     * checks that the dates are in the correct format to be added
+     * @param response The message to be sent to the client
+     * @param name The name of an owner of an appointment book
+     * @param description The description of the new appointment
+     * @param beginTime The start time of the new appointment
+     * @param endTime The end time of the new appointment
+     * @throws IOException The response could not be generated
      */
-    public Date checkDateTimeFormat(String dateTime) throws ParseException
+    private void addAppointment(HttpServletResponse response, String name, String description, String beginTime, String endTime) throws IOException
     {
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-        format.setLenient(false);
-
-        return format.parse(dateTime);
-    }
-
-
-
-
-
-
-
-    public String getAppointmentsBetweenBeginTimeAndEndTime(Date beginDate, Date endDate)
-    {
-        Iterator iterator = appointmentBook.getAppointments().iterator();
-        StringBuilder sb = new StringBuilder();
-        Appointment element;
-        int count = 0;
-
-        while(iterator.hasNext())
-        {
-            element = (Appointment) iterator.next();
-            if(element.getBeginTime().compareTo(beginDate) >= 0)
-            {
-                if(element.getEndTime().compareTo(endDate) <= 0)
-                {
-                    sb.append("\n<");
-                    sb.append(++count);
-                    sb.append(">\nDescription:\n\t");
-                    sb.append(element.getDescription());
-                    sb.append("\n\nStarts:    ");
-                    sb.append(element.getBeginTimeString());
-                    sb.append("\nEnds:      ");
-                    sb.append(element.getEndTimeString());
-                    sb.append("\nDuration:  ");
-                    sb.append(element.getDuration());
-                    sb.append(" minutes\n");
-                }
-            }
-        }
-
-        return sb.toString();
-    }
-
-
-    private void searchOwnersAppointmentBookForDates(HttpServletResponse response, String name, String begin, String end) throws IOException {
-        initializeAppointmentBook(response, name);
         PrintWriter pw = response.getWriter();
-        //Need to make begin and end strings into proper date format.
-        Date start;
-        Date finish;
-        String s;
-        String e;
-        try{
-            start =  checkDateTimeStringFormat(begin);
-            finish = checkDateTimeStringFormat(end);
+        Date start, finish;
+        String s, e;
 
+        try{
+            start =  checkDateTimeFormat(beginTime);
+            finish = checkDateTimeFormat(endTime);
 
             s = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(start);
             e = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(finish);
-
-
 
             start = checkDateTimeFormat(s);
             finish = checkDateTimeFormat(e);
@@ -310,41 +134,191 @@ public class AppointmentBookServlet extends HttpServlet
             return;
         }
 
+        initializeAppointmentBook(name);
+        Appointment appointment = new Appointment(description, start, finish);
+        appointmentBook.addAppointment(appointment);
 
-
-
-        String search = getAppointmentsBetweenBeginTimeAndEndTime(start, finish);
-
-
-        if(search != null && !search.equals(""))
-        {
-
-            writeOwnerAndInfo(name, s, e, response, search);
-
-            // writeSearch(search, response);
-        }else{
-            pw.println(Messages.noAppointmentsBetweenTimes(name, s, e));
-        }
-
+        this.data.put(name, appointmentBook);
     }
 
+
+    /**
+     * Retrieves an existing appointment book from the server if there is one for a specified owner
+     * @param name The name of the owner
+     */
+    private void initializeAppointmentBook(String name)
+    {
+        appointmentBook = this.data.get(name);
+        if(appointmentBook != null) return;
+        appointmentBook = new AppointmentBook(name);
+    }
+
+
+    /**
+     * Writes a message that there is a parameter missing from the request
+     * @param response The message to the client specifying the error
+     * @param key The parameter that is missing from the request
+     * @throws IOException The response could not be generated
+     */
+    private void missingRequiredParameter( HttpServletResponse response, String key ) throws IOException
+    {
+        PrintWriter pw = response.getWriter();
+        pw.println( Messages.missingRequiredParameter(key));
+        pw.flush();
+        
+        response.setStatus( HttpServletResponse.SC_PRECONDITION_FAILED );
+    }
 
 
 
     /**
-     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm
+     * Writes the contents of an appointment book out to a client using <code>PrettyPrinter</code>
+     * @param name The owner of the appointment book
+     * @param response The message to the client specifying the result
+     * @throws IOException The response could not be generated
+     */
+    private void writeAppointmentBook( String name, HttpServletResponse response ) throws IOException
+    {
+        appointmentBook = this.data.get(name);
+        PrintWriter pw = response.getWriter();
+
+
+        if(appointmentBook != null)
+        {
+            PrettyPrinter prettyPrinter = new PrettyPrinter();
+            String apptbook = prettyPrinter.buildAppointmentBookString(appointmentBook);
+
+            pw.println(apptbook);
+            pw.flush();
+            response.setStatus(HttpServletResponse.SC_OK);
+        }else {
+            pw.println("No appointments for " + name);
+            pw.flush();
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+    }
+
+
+    /**
+     * Writes a message to the server specifying what was searched for
+     * @param name The name of an appointment books owner
+     * @param begin The beginning of the range searched between
+     * @param end The ending of the range searched between
+     * @param response The message specifying the search
+     * @param search The result of the search, all the appointments within the given range
+     * @throws IOException The response could not be generated
+     */
+    private void writeOwnerAndInfo(String name, String begin, String end, HttpServletResponse response, String search) throws IOException
+    {
+        PrintWriter pw = response.getWriter();
+
+        pw.println(Messages.ownerAndInfo(name, begin, end, search));
+        pw.flush();
+
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+
+    /**
+     * Writes the names of the owners with appointment books stored on the server
+     * @param response The message specifying the owners names
+     * @throws IOException The response could not be generated
+     */
+    private void writeAllOwners( HttpServletResponse response) throws IOException
+    {
+        PrintWriter pw = response.getWriter();
+        pw.println(Messages.getMappingCount(data.size()));
+
+        for(Map.Entry<String, AbstractAppointmentBook> entry : this.data.entrySet())
+        {
+            pw.println(Messages.formatAppointmentBook(entry.getKey()));
+        }
+    }
+
+
+    /**
+     * Get a value from the URL that coincides with a given parameter
+     * @param param The parameter in question
+     * @param request The URL that has been requested
+     * @return The contents of the value
+     */
+    private String getParameter(String param, HttpServletRequest request)
+    {
+      String value = request.getParameter(param);
+
+      if (value == null || "".equals(value)) {
+        return null;
+
+      } else {
+        return value;
+      }
+    }
+
+
+
+    /**
+     * Searches for appointments in an appointment book that are within a given date range
+     * @param response The result of the search, contains a code and message
+     * @param name The owner of an appointment book to be searched
+     * @param begin The beginning of the range to be searched
+     * @param end The ending of the range to be searched
+     * @throws IOException The response could not be established
+     */
+    private void searchOwnersAppointmentBookForDates(HttpServletResponse response, String name, String begin, String end) throws IOException
+    {
+        initializeAppointmentBook(name);
+        PrintWriter pw = response.getWriter();
+
+        //Need to make begin and end strings into proper date format.
+        Date start, finish;
+        String s, e;
+
+        try{
+            start = checkDateTimeFormat(begin);
+            finish = checkDateTimeFormat(end);
+
+            s = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(start);
+            e = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(finish);
+
+            start = checkDateTimeFormat(s);
+            finish = checkDateTimeFormat(e);
+        }catch(ParseException ex)
+        {
+            pw.println(ex.getMessage());
+            pw.flush();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        PrettyPrinter prettyPrinter = new PrettyPrinter();
+
+        String search = prettyPrinter.getAppointmentsBetweenBeginTimeAndEndTime(appointmentBook, start, finish);
+
+        if(search != null && !search.equals(""))
+        {
+            writeOwnerAndInfo(name, s, e, response, search);
+
+        }else{
+            pw.println(Messages.noAppointmentsBetweenTimes(name, s, e));
+            pw.flush();
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+
+    }
+
+
+    /**
+     * Checks that a date and time match the format of mm/dd/yyyy hh:mm am/pm.
      *
      * @param dateTime  The date/time that needs to be checked.
+     * @throws ParseException The date could not be parsed into proper format
      */
-    static Date checkDateTimeStringFormat(String dateTime)throws ParseException
+    public Date checkDateTimeFormat(String dateTime) throws ParseException
     {
-        Date date;
-        DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         format.setLenient(false);
 
-        date = format.parse(dateTime);
-
-        return date;
+        return format.parse(dateTime);
     }
+
 
 }

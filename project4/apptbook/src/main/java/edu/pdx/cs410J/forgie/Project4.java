@@ -35,17 +35,23 @@ public class Project4 {
 
     public static final String MISSING_ARGS = "Missing command line arguments: ";
 
-    //EDIT!!
     private static final String README = "\n\n"+
             "    Project4 parses 10-15 command line arguments that are used to create an appointment and add it to an\n" +
-            "appointment book posted on a server a. The appointment\n" +
-            "will be stored in an appointment book of an 'Owner' and then written to a file designated by the user. An\n" +
-            "appointment book consists of the owners name and a linked list of appointments. An appointment consists\n" +
-            "of; a 'description' describing the appointment, a 'beginTime' indicating the start date and time of the\n" +
-            "appointment, and an 'endTime' indicating the date and time the appointment will end.";
+            "appointment book posted on a server. An appointment will be created from command line arguments unless\n" +
+            "the search option has been selected. The appointment will be added to an existing appointment book for\n" +
+            "the specified owner or if the owner does not have an existing appointment book one will be created with\n" +
+            "the single appointment. If the search option is specified no description is expected and an appointment\n" +
+            "book will be searched for appointments between the beginTime an endTime. If the print option is specified\n" +
+            "a message describing the appointment that was just added will be shown or if search was enabled it will\n" +
+            "display a message describing the search completed. An appointment consists of; a 'description' describing\n" +
+            " the appointment, a 'beginTime' indicating the start date and time of the appointment and an 'endTime'\n" +
+            "indicating the date and time the appointment will end.";
 
 
-
+    /**
+     * The main method for Project4, parses command line and calls methods to complete desired actions
+     * @param args The command line arguments from the user
+     */
     public static void main(String... args)
     {
         int j;
@@ -78,13 +84,10 @@ public class Project4 {
         {
             getPortNumFromString();
             AppointmentBookRestClient client = new AppointmentBookRestClient(hostName, portNum);
-            HttpRequestHelper.Response response;
 
             try {
-                if (search) response = getResponseFromSearchAction(client);
-                else response = getResponseFromAddAppointmentAction(client);    //add appointments
-
-                checkResponseCode( HttpURLConnection.HTTP_OK, response);
+                if (search) getResponseFromSearchAction(client);     //search appointments
+                else getResponseFromAddAppointmentAction(client);    //add appointments
 
             } catch ( IOException ex ) {
                 error("While contacting server: " + ex);
@@ -96,43 +99,50 @@ public class Project4 {
     }
 
 
-
-
-
-
-
-
-
-
-
-    private static HttpRequestHelper.Response getResponseFromAddAppointmentAction(AppointmentBookRestClient client) throws IOException {
+    /**
+     * Completes the add post to the server and checks the response code for completion.
+     *
+     * @param client The RESTful server client that generates the URL
+     * @throws IOException The client was not able to generate a URL
+     */
+    private static void getResponseFromAddAppointmentAction(AppointmentBookRestClient client) throws IOException
+    {
         HttpRequestHelper.Response response;
-        StringBuilder sb = new StringBuilder();
-        sb.append(description);
-        sb.append("~");
-        sb.append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(beginDate));
-        sb.append("~");
-        sb.append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(endDate));
 
-        response = client.addAppointment(owner, sb.toString());
+        response = client.addAppointment(owner, description, begintime, endtime);
+
+        checkResponseCode( HttpURLConnection.HTTP_OK, response);
 
         completePrintOption();
-        return response;
     }
 
-    private static HttpRequestHelper.Response getResponseFromSearchAction(AppointmentBookRestClient client) throws IOException {
-        HttpRequestHelper.Response response;// seach for appointments between beginDate and EndDate
+
+    /**
+     * Completes the search request to the server, checks the response and prints it to the command line
+     *
+     * @param client The RESTful server client that generates the URL
+     * @throws IOException The client was not able to generate a URL
+     */
+    private static void getResponseFromSearchAction(AppointmentBookRestClient client) throws IOException
+    {
+        HttpRequestHelper.Response response;
+
+        // seach for appointments between beginDate and EndDate
         response = client.getAppointmentsBetweenDates(owner, begintime, endtime);
 
         checkResponseCode(HttpURLConnection.HTTP_OK, response);
 
         clearScreen();
-        System.out.println(response.getContent());
-        return response;
+        System.out.println(response.getContent() + "\n\n");
     }
 
-    private static void completePrintOption() {
 
+    /**
+     * Prints the newly added appointment if -print is specified in the command line arguments
+     * or if -search is also found then it will print a message with the interval being searched for
+     */
+    private static void completePrintOption()
+    {
         if(search && print)
         {
             System.out.printf("\n\nYou were searching for appointments with dates between %s and %s\n",
@@ -145,7 +155,12 @@ public class Project4 {
         if(print) System.out.println("\n\n" + appointment.toString() + "\n");
     }
 
-    private static void getPortNumFromString() {
+
+    /**
+     * Makes sure that the argument following -port is a number
+     */
+    private static void getPortNumFromString()
+    {
         try {
             portNum = Integer.parseInt( portString );
 
@@ -169,6 +184,12 @@ public class Project4 {
         }
     }
 
+
+    /**
+     * Prints an error message and exits the program.
+     *
+     * @param message The error message
+     */
     private static void error( String message )
     {
         PrintStream err = System.err;
@@ -176,6 +197,8 @@ public class Project4 {
 
         System.exit(1);
     }
+
+
 
 
     /**
@@ -200,6 +223,8 @@ public class Project4 {
         err.println("  -README             Prints a README for this project and exits");
         err.println();
     }
+
+
 
 
     /**
@@ -236,6 +261,8 @@ public class Project4 {
         }
         return j;
     }
+
+
 
 
     /**
@@ -307,6 +334,8 @@ public class Project4 {
     }
 
 
+
+
     /**
      * Notifies the user if too many command line arguments have been entered and exits after displaying the correct
      * usage expected.
@@ -323,6 +352,7 @@ public class Project4 {
     }
 
 
+
     /**
      * Displays all command line arguments the user entered.
      * @param args      Command line arguments entered by user.
@@ -335,6 +365,7 @@ public class Project4 {
             System.out.println("\t" + arg);
         }
     }
+
 
 
     /**
@@ -396,6 +427,7 @@ public class Project4 {
             }
         }
     }
+
 
 
     /**

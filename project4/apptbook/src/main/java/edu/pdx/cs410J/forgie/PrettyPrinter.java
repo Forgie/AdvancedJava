@@ -2,11 +2,11 @@ package edu.pdx.cs410J.forgie;
 
 import edu.pdx.cs410J.AbstractAppointmentBook;
 import edu.pdx.cs410J.AppointmentBookDumper;
-import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -17,14 +17,12 @@ import java.util.Iterator;
  */
 public class PrettyPrinter implements AppointmentBookDumper
 {
-    private String host;
-    private int port;
     private StringBuilder sb;
+    private String File;
 
-    public PrettyPrinter(String hostName, int portNum)
+    public PrettyPrinter(String fileName)
     {
-        this.host = hostName;
-        this.port = portNum;
+        this.File = fileName;
         this.sb = new StringBuilder();
     }
 
@@ -44,31 +42,16 @@ public class PrettyPrinter implements AppointmentBookDumper
      */
     public void dump(AbstractAppointmentBook book) throws IOException
     {
-
         OutputStreamWriter output = null;
 
+        buildAppointmentBookString(book);
 
-
-        AppointmentBookRestClient client = new AppointmentBookRestClient(host, port);
-
-        HttpRequestHelper.Response response;
-
-
-
-        response = client.addKeyValuePair(book.getOwnerName(), buildAppointmentFileString(book));
-
-        System.out.print(response.getContent());
-
-        //AppointmentBookServlet servlet = new AppointmentBookServlet(builder.toString());
-                //client.addKeyValuePair(book.getOwnerName(), builder.toString());
-
-        /*
         try {
             output = new OutputStreamWriter(new FileOutputStream(this.File));
-            output.write(this.builder.toString());
+            output.write(this.sb.toString());
         } finally {
             if(output != null) output.close();
-        } */
+        }
     }
 
 
@@ -79,7 +62,7 @@ public class PrettyPrinter implements AppointmentBookDumper
      */
     public void print(AbstractAppointmentBook book)
     {
-        buildAppointmentFileString(book);
+        buildAppointmentBookString(book);
         System.out.print(this.sb);
         System.out.println("\n");
     }
@@ -87,17 +70,15 @@ public class PrettyPrinter implements AppointmentBookDumper
 
 
     /**
-     * <code>buildAppointmentFileString</code> turns the contents of an
-     * AppointmentBook into a string that can be written to a file.
+     * <code>buildAppointmentBookString</code> turns the contents of an
+     * AppointmentBook into a string that can be written to an output.
      * @param book      An appointment book to be converted into a string.
      */
-    public String buildAppointmentFileString(AbstractAppointmentBook book)
+    public String buildAppointmentBookString(AbstractAppointmentBook book)
     {
         Iterator iterator = book.getAppointments().iterator();
         Appointment element;
 
-        //this.builder.append("OWNER NAME: ");
-        //this.builder.append(book.getOwnerName());
         this.sb.append("\t\t");
         this.sb.append(book.getOwnerName());
         this.sb.append("'s Appointments\n");
@@ -119,6 +100,46 @@ public class PrettyPrinter implements AppointmentBookDumper
             this.sb.append(element.getDuration());
             this.sb.append(" minutes\n");
         }
+        return sb.toString();
+    }
+
+
+
+    /**
+     * Searches for appointments with dates between specific times and builds a pretty formatted string
+     * @param book The appointment book to be searched
+     * @param beginDate The beginning time to search between
+     * @param endDate The ending time to search between
+     * @return The string of appointments between specific times nicely formatted
+     */
+    public String getAppointmentsBetweenBeginTimeAndEndTime(AbstractAppointmentBook book, Date beginDate, Date endDate)
+    {
+        Iterator iterator = book.getAppointments().iterator();
+        Appointment element;
+        int count = 0;
+
+        while(iterator.hasNext())
+        {
+            element = (Appointment) iterator.next();
+            if(element.getBeginTime().compareTo(beginDate) >= 0)
+            {
+                if(element.getEndTime().compareTo(endDate) <= 0)
+                {
+                    this.sb.append("\n<");
+                    this.sb.append(++count);
+                    this.sb.append(">\nDescription:\n\t");
+                    this.sb.append(element.getDescription());
+                    this.sb.append("\n\nStarts:    ");
+                    this.sb.append(element.getBeginTimeString());
+                    this.sb.append("\nEnds:      ");
+                    this.sb.append(element.getEndTimeString());
+                    this.sb.append("\nDuration:  ");
+                    this.sb.append(element.getDuration());
+                    this.sb.append(" minutes\n");
+                }
+            }
+        }
+
         return sb.toString();
     }
 }
