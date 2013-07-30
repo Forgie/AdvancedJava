@@ -44,7 +44,7 @@ public class Project4 {
             "book will be searched for appointments between the beginTime an endTime. If the print option is specified\n" +
             "a message describing the appointment that was just added will be shown or if search was enabled it will\n" +
             "display a message describing the search completed. An appointment consists of; a 'description' describing\n" +
-            " the appointment, a 'beginTime' indicating the start date and time of the appointment and an 'endTime'\n" +
+            "the appointment, a 'beginTime' indicating the start date and time of the appointment and an 'endTime'\n" +
             "indicating the date and time the appointment will end.";
 
 
@@ -220,6 +220,7 @@ public class Project4 {
         err.println("  -host <hostname>    Host computer on which the server runs");
         err.println("  -port <port>        Port on which the server is listening");
         err.println("  -search             Appointments should be searched for");
+        err.println("  -print              Prints the appointment that has been added or the date range of the search");
         err.println("  -README             Prints a README for this project and exits");
         err.println();
     }
@@ -256,8 +257,11 @@ public class Project4 {
             case 4:
                 j = 4;
                 break;
-            default:
+            case 5:
                 j = 5;
+                break;
+            default:
+                j = 6;
         }
         return j;
     }
