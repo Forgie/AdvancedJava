@@ -8,8 +8,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DatePicker;
+import com.google.gwt.user.client.Window;
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -20,36 +23,26 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 public class SearchPanel extends SimplePanel {
-    DockPanel panel;
     public SearchPanel()
-    {
-        panel = new DockPanel();
-        HTML panelText = new HTML("Select the dates to search from");
-        panel.add(panelText, DockPanel.NORTH);
-
-        DatePicker datePicker = new DatePicker();
-        final Label text = new Label();
-
-        datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
-            public void onValueChange(ValueChangeEvent<Date> event) {
-                Date date = event.getValue();
-                String dateString = DateTimeFormat.getMediumDateFormat().format(date);
-                text.setText(dateString);
-            }
-        });
-
-        //DateTimeFormat dateFormat = DateTimeFormat.getLongDateFormat();
-        DateBox dateBox = new DateBox();
-       // dateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
-
-        //panel.add(datePicker, DockPanel.CENTER);
-        panel.add(dateBox, DockPanel.EAST);
-
-    }
+    {}
 
     public DockPanel getPanel()
     {
+        DockPanel panel;
+        panel = new DockPanel();
+        panel.setSpacing(4);
+        panel.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
 
+        HTML panelText = new HTML("Select the dates to search from");
+        panel.add(panelText, DockPanel.NORTH);
+
+        panelText = new HTML("Starting:");
+        panel.add(panelText, DockPanel.WEST);
+
+        panel.add(new DateBoxPicker().createDateBoxPicker(), DockPanel.WEST);
+        panelText = new HTML("\tEnding:");
+        panel.add(panelText, DockPanel.CENTER);
+        panel.add(new DateBoxPicker().createDateBoxPicker(), DockPanel.EAST);
         return panel;
     }
 

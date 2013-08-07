@@ -5,4 +5,5 @@
   <entry-point class="edu.pdx.cs410J.forgie.client.AppointmentBookGwt"/>
 
   <servlet path="/ping" class="edu.pdx.cs410J.forgie.server.PingServiceImpl"/>
+
 </module>

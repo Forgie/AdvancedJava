@@ -6,15 +6,25 @@ import edu.pdx.cs410J.forgie.client.AppointmentBook;
 import edu.pdx.cs410J.forgie.client.Appointment;
 import edu.pdx.cs410J.forgie.client.PingService;
 
+import java.util.Collection;
+import java.util.TreeSet;
+
 /**
  * The server-side implementation of the division service
  */
 public class PingServiceImpl extends RemoteServiceServlet implements PingService
 {
+    TreeSet<AbstractAppointmentBook> data = new TreeSet<AbstractAppointmentBook>();
+      /*
     public AbstractAppointmentBook ping()
     {
         AppointmentBook book = new AppointmentBook();
         book.addAppointment( new Appointment() );
         return book;
+    }
+     */
+    public Collection<AbstractAppointmentBook> getAppointmentBooks()
+    {
+        return data;
     }
 }

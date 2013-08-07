@@ -4,6 +4,8 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.pdx.cs410J.AbstractAppointmentBook;
 
+import java.util.Collection;
+
 /**
  * A GWT remote service that returns a dummy appointment book
  */
@@ -13,6 +15,8 @@ public interface PingService extends RemoteService {
   /**
    * Returns the current date and time on the server
    */
-  public AbstractAppointmentBook ping();
+  //public AbstractAppointmentBook ping();
+
+    public Collection<AbstractAppointmentBook> getAppointmentBooks();
 
 }

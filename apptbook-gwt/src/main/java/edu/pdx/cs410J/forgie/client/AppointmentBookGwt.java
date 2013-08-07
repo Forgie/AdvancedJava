@@ -25,40 +25,31 @@ public class AppointmentBookGwt implements EntryPoint {
   public void onModuleLoad()
   {
       TabLayoutPanel tabPanel = new TabLayoutPanel(1, Unit.CM);
-      //tabPanel.setStyleName(Unit.);
-      //tabPanel.setAnimationDuration(1000);
-      //tabPanel.getElement().getStyle().setMarginBottom(10.0, Unit.CM);
 
-      // Add a home tab
-      String tabTitles = "Home";
-      HTML homeText = new HTML("Add");
-      tabPanel.add(homeText, tabTitles);
+      tabPanel.add(new HomePanel().getHomePanel(), "Home");
 
-      // Add a tab with an image
-      SimplePanel imageContainer = new SimplePanel();
-      SearchPanel searchContainer = new SearchPanel();//new SimplePanel();
-      //searchContainer.getPanel();
-      //searchContainer.setWidget(new DatePicker());
-      //imageContainer.setWidget(new Image(Showcase.images.gwtLogo()));
+      HTML homeText = new HTML("Nothing here yet");
+
+      tabPanel.add(homeText, "Add");
+
+      SearchPanel searchContainer = new SearchPanel();
+
       tabPanel.add(searchContainer.getPanel(), "Search");
 
 
 
       // Add a tab
       HTML moreInfo = new HTML("Nothing here yet");
-      tabPanel.add(moreInfo, "Appointment Book");
+      tabPanel.add(moreInfo, "View Appointments");
 
       // Return the content
       tabPanel.selectTab(0);
-      //tabPanel.ensureDebugId("cwTabPanel");
+      tabPanel.ensureDebugId("TabPanel");
 
-      //return tabPanel;
 
 
       RootPanel rootPanel = RootPanel.get();
       rootPanel.add(tabPanel, -1, -1);
-
-      //rootPanel.addStyleName();
   }
 
 
