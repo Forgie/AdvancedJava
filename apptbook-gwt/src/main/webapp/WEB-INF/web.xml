@@ -7,12 +7,12 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>pingServlet</servlet-name>
-    <servlet-class>edu.pdx.cs410J.forgie.server.PingServiceImpl</servlet-class>
+    <servlet-class>edu.pdx.cs410J.forgie.server.AppointmentBooksServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>pingServlet</servlet-name>
-    <url-pattern>/apptbook/ping</url-pattern>
+    <url-pattern>/apptbook/books</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->

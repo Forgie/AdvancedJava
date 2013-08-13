@@ -4,6 +4,6 @@
   <inherits name='edu.pdx.cs410J.Projects'/>
   <entry-point class="edu.pdx.cs410J.forgie.client.AppointmentBookGwt"/>
 
-  <servlet path="/ping" class="edu.pdx.cs410J.forgie.server.PingServiceImpl"/>
+  <servlet path="/books" class="edu.pdx.cs410J.forgie.server.AppointmentBooksServiceImpl"/>
 
 </module>

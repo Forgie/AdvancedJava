@@ -1,21 +1,8 @@
 package edu.pdx.cs410J.forgie.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.*;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DatePicker;
-import edu.pdx.cs410J.AbstractAppointment;
-import edu.pdx.cs410J.AbstractAppointmentBook;
 
-
-import java.util.Collection;
 
 /**
  * A basic GWT class that makes sure that we can send an appointment book back from the server
@@ -24,32 +11,29 @@ public class AppointmentBookGwt implements EntryPoint {
 
   public void onModuleLoad()
   {
-      TabLayoutPanel tabPanel = new TabLayoutPanel(1, Unit.CM);
 
-      tabPanel.add(new HomePanel().getHomePanel(), "Home");
+      //AppointmentBookUI ui = new AppointmentBookUI();
 
-      HTML homeText = new HTML("Nothing here yet");
+      HTML moreInfo;
+      //Panel suggestPanel = getOwnerPanel();
 
-      tabPanel.add(homeText, "Add");
+      TabPanel tabPanel = new DecoratedTabPanel();
 
-      SearchPanel searchContainer = new SearchPanel();
+      moreInfo = new HTML("README button");
+      tabPanel.add(moreInfo, "Help");
 
-      tabPanel.add(searchContainer.getPanel(), "Search");
+      tabPanel.add(new CommonPanel("Select a name or enter a new one to add an appointment."), "Add");
 
+      tabPanel.add(new CommonPanel("Select the name of the owner and the dates to search from."), "Search");
 
-
-      // Add a tab
-      HTML moreInfo = new HTML("Nothing here yet");
+      moreInfo = new HTML("Nothing here yet");
       tabPanel.add(moreInfo, "View Appointments");
 
-      // Return the content
       tabPanel.selectTab(0);
       tabPanel.ensureDebugId("TabPanel");
 
-
-
       RootPanel rootPanel = RootPanel.get();
-      rootPanel.add(tabPanel, -1, -1);
+      rootPanel.add(tabPanel, -1,-1);
   }
 
 
@@ -121,7 +105,7 @@ private final CwConstants constants;
     {
         public void onClick( ClickEvent clickEvent )
         {
-            PingServiceAsync async = GWT.create( PingService.class );
+            PingServiceAsync async = GWT.create( AppointmentBooksService.class );
             async.ping( new AsyncCallback<AbstractAppointmentBook>()
             {
 
