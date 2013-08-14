@@ -185,7 +185,7 @@ public class CommonPanel extends Composite {
                 final String owner = suggestBox.getText();
 
                 final TextArea textArea = getTextArea(65, 20);
-                textArea.setText("Appointments between dates");
+                textArea.setText("");
                 textArea.setReadOnly(true);
                 absolutePanel.add(textArea, 100, 265);
 
@@ -206,8 +206,12 @@ public class CommonPanel extends Composite {
                             else textArea.setText(result);
                         }
                     });
-
                 } else Window.alert("Please fill out blank fields!");
+
+                textArea.setValue("");
+                suggestBox.setText("");
+                startDateBoxPicker.clearDateValue();
+                endDateBoxPicker.clearDateValue();
             }
         });
     }

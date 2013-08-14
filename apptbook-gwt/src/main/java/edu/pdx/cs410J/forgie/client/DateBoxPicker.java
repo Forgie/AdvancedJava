@@ -35,20 +35,20 @@ public class DateBoxPicker extends Composite {
         initWidget(dateBox);
     }
 
+    /**
+     * Gets the date from the datebox
+     * @return a date formatted as MM/dd/yyyy h:mm a
+     */
     public Date getDateValue()
     {
         return dateBox.getValue();
     }
 
+    /**
+     * Clears the date value in the datebox
+     */
     public void clearDateValue()
     {
         dateBox.setValue(null);
     }
-
-    public void validateValue()
-    {
-
-    }
-
-
 }

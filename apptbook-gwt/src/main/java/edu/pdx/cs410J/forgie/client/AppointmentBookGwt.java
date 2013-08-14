@@ -18,7 +18,9 @@ public class AppointmentBookGwt implements EntryPoint {
                                          "appointment book for appointments within a given range or View All appointments " +
                                          "for a given owner. It should be noted that anytime a new appointment book has " +
                                          "been added they will need to update the owner list to be provided a suggestion " +
-                                         "that contains the new owner. I struggled with this program and some things are " +
+                                         "that contains the new owner. The date picker boxes will provide a time but the " +
+                                         "user is expected to change it to another valid time, although I was not able to " +
+                                         "add the implementation for that. I struggled with this program and some things are " +
                                          "still buggy Nullexceptions are thrown by the RPC but are not detrimental to " +
                                          "operation (as far as I can tell). Dates are not fully error checked and messages " +
                                          "are not clear when the user enters a malformatted date. I enjoyed this challenge " +
