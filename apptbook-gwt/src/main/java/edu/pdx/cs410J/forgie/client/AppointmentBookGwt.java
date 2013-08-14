@@ -13,7 +13,7 @@ public class AppointmentBookGwt implements EntryPoint {
     DecoratorPanel decoratorPanelWrapper;
     boolean hidden;
 
-    private static final String readme = "   Project5 provides a UI for an appointment book program. A user can select " +
+    private static final String readme = "Project5 provides a UI for an appointment book program. A user can select " +
                                          "the tab of their choice to either Add to an appointment book, Search an " +
                                          "appointment book for appointments within a given range or View All appointments " +
                                          "for a given owner. It should be noted that anytime a new appointment book has " +
