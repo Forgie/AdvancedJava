@@ -21,15 +21,14 @@ public class AppointmentBookGwt implements EntryPoint {
                                          "that contains the new owner. The date picker boxes will provide a time but the " +
                                          "user is expected to change it to another valid time, although I was not able to " +
                                          "add the implementation for that. I struggled with this program and some things are " +
-                                         "still buggy Nullexceptions are thrown by the RPC but are not detrimental to " +
-                                         "operation (as far as I can tell). Dates are not fully error checked and messages " +
-                                         "are not clear when the user enters a malformatted date. I enjoyed this challenge " +
-                                         "but as you noted in class it is easy for the code to begin to feel bulky and " +
-                                         "it was hard for me to know where to put widgets and how to break up the program. " +
-                                         "As a result I created unwieldly code and found myself too far in to restart and " +
-                                         "not enough time if I wanted to. So sadly this is what I have and it does not " +
-                                         "look fantastically creative but trust me it took a lot of effort. Thank you Dave " +
-                                         "I enjoyed your class a lot and learned much more!";
+                                         "still buggy but main requirements are in place. Dates are not fully error checked " +
+                                         "and messages are not clear when the user enters a malformatted date. I enjoyed " +
+                                         "this challenge but as you noted in class it is easy for the code to begin to feel " +
+                                         "bulky and it was hard for me to know where to put widgets and how to break up the " +
+                                         "program. As a result I created unwieldly code and found myself too far in to " +
+                                         "restart and not enough time if I wanted to. So sadly this is what I have and it " +
+                                         "does not look fantastically creative but trust me it took a lot of effort. " +
+                                         "Thank you Dave I enjoyed your class a lot and learned much more!";
 
 
     /**

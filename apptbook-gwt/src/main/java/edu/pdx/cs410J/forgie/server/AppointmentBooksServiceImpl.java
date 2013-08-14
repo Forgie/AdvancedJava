@@ -21,17 +21,15 @@ public class AppointmentBooksServiceImpl extends RemoteServiceServlet implements
     @Override
     public LinkedList<String> getAppointmentBookOwners()
     {
-
-    if(data.size() == 0) return null;
-        else
-    {
         LinkedList<String> list = new LinkedList<String>();
+    if(data.size() > 0)
+    {
         for(String key : data.keySet())
         {
             list.add(key);
         }
-        return list;
     }
+        return list;
     }
 
 
@@ -69,10 +67,15 @@ public class AppointmentBooksServiceImpl extends RemoteServiceServlet implements
     @Override
     public String searchAppointmentBook(String owner, Date start, Date end)
     {
+        if(this.data.containsKey(owner))
+        {
 
-        PrettyPrinter prettyPrinter = new PrettyPrinter();
-
-        return prettyPrinter.getAppointmentsBetweenBeginTimeAndEndTime(this.data.get(owner), start, end);
+            PrettyPrinter prettyPrinter = new PrettyPrinter();
+            String appts = prettyPrinter.getAppointmentsBetweenBeginTimeAndEndTime(this.data.get(owner), start, end);
+            if(appts != null && !appts.isEmpty())
+                return appts;
+        }
+        return "EMPTY";
     }
 
 
@@ -82,9 +85,17 @@ public class AppointmentBooksServiceImpl extends RemoteServiceServlet implements
      * @return a nicely formatted appointment book as a string
      */
     @Override
-    public String allAppointments(String owner) {
-        PrettyPrinter prettyPrinter = new PrettyPrinter();
+    public String allAppointments(String owner)
+    {
+        if(this.data.containsKey(owner))
+        {
+            PrettyPrinter prettyPrinter = new PrettyPrinter();
 
-        return prettyPrinter.buildAppointmentBookString(this.data.get(owner));
+            String appts = prettyPrinter.buildAppointmentBookString(this.data.get(owner));
+
+            if(appts != null && !appts.isEmpty())
+            return appts;
+        }
+        return "EMPTY";
     }
 }

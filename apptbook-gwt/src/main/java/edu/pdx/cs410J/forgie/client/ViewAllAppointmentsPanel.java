@@ -76,7 +76,7 @@ public class ViewAllAppointmentsPanel extends Composite {
 
                         @Override
                         public void onSuccess(String result) {
-                            if (result.equals(null) || result.isEmpty())
+                            if (result.equals("EMPTY"))
                                 Window.alert(owner + " does not have any appointments");
                             else textArea.setText(result);
                         }
