@@ -14,16 +14,42 @@ import java.util.LinkedList;
 @RemoteServiceRelativePath("books")
 public interface AppointmentBooksService extends RemoteService {
 
-  /**
-   * Returns the current date and time on the server
-   */
-  //public AbstractAppointmentBook ping();
 
+    /**
+     * Returns a list of appointment book owners
+     * @return a linkedlist of strings
+     */
     public LinkedList<String> getAppointmentBookOwners();
 
-    public Boolean addAppointment(String owner, String description, Date start, Date end);
 
+    /**
+     * Posts an appointment to the server and returns true if the appointment was valid and succesfully added.
+     *
+     * @param owner  the owner name of an appointment book
+     * @param description  the description of an appointment
+     * @param start  the start date for an appointment
+     * @param end  the end date for an appointment
+     */
+    public void addAppointment(String owner, String description, Date start, Date end);
+
+
+    /**
+     * Searches an appointment book for appointments between the
+     * given date and times for a specific owner and returns the string to be displayed.
+     *
+     * @param owner the owner name of an appointment book
+     * @param start the start date to search between
+     * @param end the end date to search between
+     * @return the pretty printed appointments between the desired dates
+     */
     public String searchAppointmentBook(String owner, Date start, Date end);
 
+
+    /**
+     * Returns all the appointmments for a specific owner as a string to be displayed
+     *
+     * @param owner the owner name of an appointment book
+     * @return the pretty printed appointment book
+     */
     public String allAppointments(String owner);
 }

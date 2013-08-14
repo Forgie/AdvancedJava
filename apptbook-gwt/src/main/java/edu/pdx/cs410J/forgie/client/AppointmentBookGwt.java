@@ -1,6 +1,8 @@
 package edu.pdx.cs410J.forgie.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 
 
@@ -8,19 +10,40 @@ import com.google.gwt.user.client.ui.*;
  * A basic GWT class that makes sure that we can send an appointment book back from the server
  */
 public class AppointmentBookGwt implements EntryPoint {
+    DecoratorPanel decoratorPanelWrapper;
+    boolean hidden;
+
+    private static final String readme = "   Project5 provides a UI for an appointment book program. A user can select " +
+                                         "the tab of their choice to either Add to an appointment book, Search an " +
+                                         "appointment book for appointments within a given range or View All appointments " +
+                                         "for a given owner. It should be noted that anytime a new appointment book has " +
+                                         "been added they will need to update the owner list to be provided a suggestion " +
+                                         "that contains the new owner. I struggled with this program and some things are " +
+                                         "still buggy Nullexceptions are thrown by the RPC but are not detrimental to " +
+                                         "operation (as far as I can tell). Dates are not fully error checked and messages " +
+                                         "are not clear when the user enters a malformatted date. I enjoyed this challenge " +
+                                         "but as you noted in class it is easy for the code to begin to feel bulky and " +
+                                         "it was hard for me to know where to put widgets and how to break up the program. " +
+                                         "As a result I created unwieldly code and found myself too far in to restart and " +
+                                         "not enough time if I wanted to. So sadly this is what I have and it does not " +
+                                         "look fantastically creative but trust me it took a lot of effort. Thank you Dave " +
+                                         "I enjoyed your class a lot and learned much more!";
+
+
+    /**
+     * Initializes the root panel with Tab panel containing the Menu, Add, Search and View All Appointments
+     */
   @Override
   public void onModuleLoad()
   {
-
-      //AppointmentBookUI ui = new AppointmentBookUI();
-
-      HTML moreInfo;
-      //Panel suggestPanel = getOwnerPanel();
+      decoratorPanelWrapper = new DecoratorPanel();
+      hidden = true;
 
       TabPanel tabPanel = new DecoratedTabPanel();
 
-      moreInfo = new HTML("README button");
-      tabPanel.add(moreInfo, "Help");
+      setHelpTab();
+
+      tabPanel.add(decoratorPanelWrapper, "Help");
 
       tabPanel.add(new CommonPanel(true),"Add");
 
@@ -37,102 +60,47 @@ public class AppointmentBookGwt implements EntryPoint {
   }
 
 
-}
-
-
-/*
- /**
-   * The constants used in this Content Widget.
-
-public static interface CwConstants extends Constants {
-    String cwTabPanelDescription();
-
-    String cwTabPanelName();
-
-    String cwTabPanelTab0();
-
-    String cwTabPanelTab2();
-
-    String[] cwTabPanelTabs();
-}
-
-/**
- * An instance of the constants.
-
-private final CwConstants constants;
-
     /**
-     * Initialize this example.
+     * Initialize a widget for the Help tab just contains a button
+     * that can be clicked to hide or show readme
+     *
+     */
+  private void setHelpTab()
+  {
+      final AbsolutePanel absolutePanel = new AbsolutePanel();
+      absolutePanel.setSize("800px", "650px");
 
-    @Override
-    public Widget onInitialize() {
-        // Create a tab panel
-        TabLayoutPanel tabPanel = new TabLayoutPanel(2.5, Unit.EM);
-        tabPanel.setAnimationDuration(1000);
-        tabPanel.getElement().getStyle().setMarginBottom(10.0, Unit.PX);
-
-        // Add a home tab
-        String[] tabTitles = constants.cwTabPanelTabs();
-        HTML homeText = new HTML(constants.cwTabPanelTab0());
-        tabPanel.add(homeText, tabTitles[0]);
-
-        // Add a tab with an image
-        SimplePanel imageContainer = new SimplePanel();
-        imageContainer.setWidget(new Image(Showcase.images.gwtLogo()));
-        tabPanel.add(imageContainer, tabTitles[1]);
-
-        // Add a tab
-        HTML moreInfo = new HTML(constants.cwTabPanelTab2());
-        tabPanel.add(moreInfo, tabTitles[2]);
-
-        // Return the content
-        tabPanel.selectTab(0);
-        tabPanel.ensureDebugId("cwTabPanel");
-
-        return tabPanel;
-    }
-*/
+      final HTML README = new HTML(readme);
+      README.setWordWrap(true);
+      README.setWidth("500px");
 
 
+      final Button readmeButton = new Button();
+      readmeButton.setText("View README");
 
+      readmeButton.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event)
+          {
+            absolutePanel.add(README, 100, 50);
 
-
-
-    /*
-    Button buttonPing = new Button("Ping Server");
-
-    buttonPing.addClickHandler(new ClickHandler()
-    {
-        public void onClick( ClickEvent clickEvent )
-        {
-            PingServiceAsync async = GWT.create( AppointmentBooksService.class );
-            async.ping( new AsyncCallback<AbstractAppointmentBook>()
+            if(hidden)
             {
+                readmeButton.setText("Hide README");
+                README.setVisible(true);
+            }
+            else
+            {
+                readmeButton.setText("View README");
+                README.setVisible(false);
+            }
 
-                public void onFailure( Throwable ex )
-                {
-                    Window.alert(ex.toString());
-                }
+              hidden = !hidden;
+          }
+      });
 
-                public void onSuccess( AbstractAppointmentBook book )
-                {
-                    StringBuilder sb = new StringBuilder( book.toString() );
-                    Collection<AbstractAppointment> appts = book.getAppointments();
-                    for ( AbstractAppointment appt : appts ) {
-                        sb.append(appt);
-                        sb.append("\n");
-                    }
-                    Window.alert( sb.toString() );
-                }
-            });
-        }
-    });
+      absolutePanel.add(readmeButton, 10, 10);
 
-
-    Button buttonCalendar = new Button("");
-
-
-      RootPanel rootPanel = RootPanel.get();
-      rootPanel.add(buttonPing);
-      rootPanel.add(buttonCalendar);
-   */
+      decoratorPanelWrapper.setWidget(absolutePanel);
+  }
+}

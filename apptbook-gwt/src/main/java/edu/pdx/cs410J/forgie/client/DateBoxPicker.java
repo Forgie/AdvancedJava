@@ -15,6 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * <code>DateBoxPicker</code> initializes a  date box picker that is common
+ * between the add and search tabs
+ *
  * @author Shawn
  * Date: 8/3/13
  *
@@ -23,11 +26,6 @@ public class DateBoxPicker extends Composite {
     DateBox dateBox;
     public DateBoxPicker(final String ident)
     {
-
-
-//        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-//        dateTimeFormat.setLenient(false);
-
         DateTimeFormat dateFormat = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a");
         dateBox = new DateBox();
         dateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
@@ -47,37 +45,10 @@ public class DateBoxPicker extends Composite {
         dateBox.setValue(null);
     }
 
+    public void validateValue()
+    {
+
+    }
+
 
 }
-
-
-
-
-
-
-             /*
-        datePicker = new DatePicker();
-        datePicker.setTitle(ident + " date selection box");
-        //final Label text = new Label();
-        final HTML text = new HTML("Nothing here yet");
-           */
-
-/*        dateBox.addValueChangeHandler(new ValueChangeHandler<Date>()
-        {
-            public void onValueChange(ValueChangeEvent< Date > event)
-            {
-                Date date = event.getValue();
-                DateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-                format.setLenient(false);
-                String dateString = DateTimeFormat.getFormat("MM/dd/yyyy h:mm a").format(date);
-
-                try {
-                    Date dateParse = format.parse(dateString);
-                } catch(ParseException ex) {
-                    Window.alert(ident + " date/time format is incorrect: " + dateString
-                            + "\nShould be in the form: mm/dd/yyyy h:mm am/pm)");
-                }
-                text.setText(dateString);
-            }
-        });
-*/

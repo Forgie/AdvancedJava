@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 
 /**
+ * <code>ViewAllAppointmentsPanel</code> initializes a widget to display all appointments of a selected owner
  * @author Shawn
  * Date: 8/3/13
  *
@@ -20,7 +21,9 @@ public class ViewAllAppointmentsPanel extends Composite {
     SuggestBox suggestBox;
     MultiWordSuggestOracle oracle;
 
-
+    /**
+     * Initialize the View Appointment Book Tab
+     */
     public ViewAllAppointmentsPanel()
     {
         async = GWT.create(AppointmentBooksService.class);
@@ -48,10 +51,6 @@ public class ViewAllAppointmentsPanel extends Composite {
                 absolutePanel.add(suggestBox, 10, 50);
             }
         });
-
-
-
-
 
         absolutePanel.add(updateButton, 10, 10);
 
@@ -92,9 +91,16 @@ public class ViewAllAppointmentsPanel extends Composite {
 
         decoratorPanel.setWidget(absolutePanel);
         initWidget(decoratorPanel);
-
     }
 
+
+    /**
+     * Creates a text area to display the appointment book
+     *
+     * @param w     The width of the text area
+     * @param h     The height of the text area
+     * @return      returns a new text area
+     */
     private TextArea getTextArea(int w, int h)
     {
         TextArea textArea = new TextArea();
@@ -104,6 +110,10 @@ public class ViewAllAppointmentsPanel extends Composite {
         return textArea;
     }
 
+
+    /**
+     * Populate an oracle with names from the list of appointment books stored on the server
+     */
     private void getMultiWordSuggestOracle()
     {
         this.oracle = new MultiWordSuggestOracle();

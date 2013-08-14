@@ -15,8 +15,11 @@ import java.util.LinkedList;
 
 
 /**
+ * <code>CommonPanel</code> initializes both the add and search tabs
+ * and controls the logic of the two tabs
+ *
  * @author Shawn
- *         Date: 8/9/13
+ * Date: 8/9/13
  */
 public class CommonPanel extends Composite {
     MultiWordSuggestOracle oracle;
@@ -29,7 +32,10 @@ public class CommonPanel extends Composite {
     AppointmentBooksServiceAsync async;
 
 
-
+    /**
+     * Initialize the add and search panels
+     * @param ident a boolean to determine if the panel being added is the add or search panel
+     */
     public CommonPanel(boolean ident)
     {
         async = GWT.create(AppointmentBooksService.class);
@@ -45,6 +51,10 @@ public class CommonPanel extends Composite {
         initWidget(absolutePanelWrapper);
     }
 
+
+    /**
+     * Loads all the common traits of the two tabs
+     */
     private void loadCommon()
     {
         absolutePanel = new AbsolutePanel();
@@ -87,17 +97,30 @@ public class CommonPanel extends Composite {
         absolutePanel.add(endDateBoxPicker, 500, 190);
     }
 
+
+    /**
+     * Populates the unique items on the add panel
+     */
     private void loadAdd()
     {
-        addAddPanelItems(absolutePanel);
+        addAddPanelItems();
     }
 
+
+    /**
+     * Populates the unique items on the search panel
+     */
     private void loadSearch()
     {
-        addSearchPanelItems(absolutePanel);
+        addSearchPanelItems();
     }
 
-    private void addAddPanelItems(AbsolutePanel absolutePanel) {
+
+    /**
+     * Controls the logic for the add panel and adds unique elements
+     *
+     */
+    private void addAddPanelItems() {
         HTML panelText = new HTML("Description:");
         final Button selectButton = new Button("Add Appointment");
         final TextArea textArea = getTextArea(65,5);
@@ -120,45 +143,38 @@ public class CommonPanel extends Composite {
                 if(start != null && end != null && owner != null && description != null && !description.equals("") && !owner.equals(""))
                 {
 
-                    async.addAppointment(owner, description, start, end, new AsyncCallback<Boolean>()
+                    async.addAppointment(owner, description, start, end, new AsyncCallback<Void>()
                     {
                         @Override
                         public void onFailure(Throwable caught)
                         {
-                            Window.alert(caught.toString());
+                            Window.alert("Appointment could not be added");
                         }
+
                         @Override
-                        public void onSuccess(Boolean result)
-                        {
-                            if(!result)
-                                Window.alert("Appointment could not be added");
-                            else
-                            {
+                        public void onSuccess(Void result) {
+
                                 Window.alert("Appointment has been added to " + owner + "'s appointment book.");
                                 oracle.add(owner);
-                            }
                         }
                     });
 
                 } else Window.alert("Please fill out blank fields!");
 
-                //getMultiWordSuggestOracle();
-               // suggestBox = new SuggestBox(oracle);
                 textArea.setValue("");
                 suggestBox.setText("");
                 startDateBoxPicker.clearDateValue();
                 endDateBoxPicker.clearDateValue();
-
-
-
             }
         });
 
     }
 
 
-
-    private void addSearchPanelItems(final AbsolutePanel absolutePanel) {
+    /**
+     * Controls the logic for the search panel and adds unique elements
+     */
+    private void addSearchPanelItems() {
         Button selectButton = new Button("Search");
 
         absolutePanel.add(selectButton, 100, 240);
@@ -197,6 +213,13 @@ public class CommonPanel extends Composite {
     }
 
 
+    /**
+     * Creates a text area to display the appointment book
+     *
+     * @param w     The width of the text area
+     * @param h     The height of the text area
+     * @return      returns a new text area
+     */
     private TextArea getTextArea(int w, int h)
     {
         TextArea textArea = new TextArea();
@@ -207,7 +230,9 @@ public class CommonPanel extends Composite {
     }
 
 
-
+    /**
+     * Populate an oracle with names from the list of appointment books stored on the server
+     */
     private void getMultiWordSuggestOracle()
     {
         oracle = new MultiWordSuggestOracle();
