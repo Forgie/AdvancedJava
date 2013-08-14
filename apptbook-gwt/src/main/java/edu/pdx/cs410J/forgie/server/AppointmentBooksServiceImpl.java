@@ -2,14 +2,9 @@ package edu.pdx.cs410J.forgie.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.pdx.cs410J.AbstractAppointmentBook;
-import edu.pdx.cs410J.forgie.client.Appointment;
-import edu.pdx.cs410J.forgie.client.AppointmentBook;
 import edu.pdx.cs410J.forgie.client.AppointmentBooksService;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * The server-side implementation of the division service
@@ -17,42 +12,56 @@ import java.util.TreeMap;
 public class AppointmentBooksServiceImpl extends RemoteServiceServlet implements AppointmentBooksService
 {
     Map<String, AbstractAppointmentBook> data = new TreeMap<String, AbstractAppointmentBook>();
-      /*
-    public AbstractAppointmentBook ping()
+
+    @Override
+    public LinkedList<String> getAppointmentBookOwners()
     {
-        AppointmentBook book = new AppointmentBook();
-        book.addAppointment( new Appointment() );
-        return book;
+
+    if(data.size() == 0) return null;
+        else
+    {
+        LinkedList<String> list = new LinkedList<String>();
+        for(String key : data.keySet())
+        {
+            list.add(key);
+        }
+        return list;
     }
-     */
-    public Collection<String> getAppointmentBookOwners()
-    {
-        if(data.size() == 0) return null;
-        else return data.keySet();
     }
 
-    public boolean addAppointment(String owner, String description, Date start, Date end) {
 
+
+    @Override
+    public Boolean addAppointment(String owner, String description, Date start, Date end)
+    {
+        System.out.println("adding 34");
         Appointment appointment = new Appointment(description, start, end);
 
         AbstractAppointmentBook appointmentBook = this.data.get(owner);
+
         if(appointmentBook == null)
             appointmentBook = new AppointmentBook(owner);
 
         appointmentBook.addAppointment(appointment);
         this.data.put(owner, appointmentBook);
-
-
+        System.out.print(this.data.size() + "line 44");
 
         return true;
     }
 
-    //Maybe needed?
-    public void putAppointmentBooks(Collection<AbstractAppointmentBook> books)
+    @Override
+    public String searchAppointmentBook(String owner, Date start, Date end)
     {
-        for(AbstractAppointmentBook book : books)
-        {
-            data.put(book.getOwnerName(), book);
-        }
+
+        PrettyPrinter prettyPrinter = new PrettyPrinter();
+
+        return prettyPrinter.getAppointmentsBetweenBeginTimeAndEndTime(this.data.get(owner), start, end);
+    }
+
+    @Override
+    public String allAppointments(String owner) {
+        PrettyPrinter prettyPrinter = new PrettyPrinter();
+
+        return prettyPrinter.buildAppointmentBookString(this.data.get(owner));
     }
 }

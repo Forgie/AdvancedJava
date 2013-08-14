@@ -42,6 +42,12 @@ public class DateBoxPicker extends Composite {
         return dateBox.getValue();
     }
 
+    public void clearDateValue()
+    {
+        dateBox.setValue(null);
+    }
+
+
 }
 
 

@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.*;
  * A basic GWT class that makes sure that we can send an appointment book back from the server
  */
 public class AppointmentBookGwt implements EntryPoint {
-
+  @Override
   public void onModuleLoad()
   {
 
@@ -22,15 +22,15 @@ public class AppointmentBookGwt implements EntryPoint {
       moreInfo = new HTML("README button");
       tabPanel.add(moreInfo, "Help");
 
-      tabPanel.add(new CommonPanel("Select a name or enter a new one to add an appointment."), "Add");
+      tabPanel.add(new CommonPanel(true),"Add");
 
-      tabPanel.add(new CommonPanel("Select the name of the owner and the dates to search from."), "Search");
+      tabPanel.add(new CommonPanel(false), "Search");
 
-      moreInfo = new HTML("Nothing here yet");
-      tabPanel.add(moreInfo, "View Appointments");
+      tabPanel.add(new ViewAllAppointmentsPanel(), "AppointmentBook Viewer");
 
       tabPanel.selectTab(0);
       tabPanel.ensureDebugId("TabPanel");
+
 
       RootPanel rootPanel = RootPanel.get();
       rootPanel.add(tabPanel, -1,-1);

@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.forgie.client;
+package edu.pdx.cs410J.forgie.server;
 
 import edu.pdx.cs410J.AbstractAppointment;
 import edu.pdx.cs410J.AbstractAppointmentBook;

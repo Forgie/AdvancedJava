@@ -6,6 +6,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  * A GWT remote service that returns a dummy appointment book
@@ -18,7 +19,11 @@ public interface AppointmentBooksService extends RemoteService {
    */
   //public AbstractAppointmentBook ping();
 
-    public Collection<String> getAppointmentBookOwners();
-    //void addAppointment(AsyncCallback<Appointment> async);
-    public boolean addAppointment(String owner, String description, Date start, Date end);
+    public LinkedList<String> getAppointmentBookOwners();
+
+    public Boolean addAppointment(String owner, String description, Date start, Date end);
+
+    public String searchAppointmentBook(String owner, Date start, Date end);
+
+    public String allAppointments(String owner);
 }

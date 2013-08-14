@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.forgie.client;
+package edu.pdx.cs410J.forgie.server;
 
 import edu.pdx.cs410J.AbstractAppointment;
 
@@ -24,7 +24,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Abstr
     /**
      * Creates a new <code>Appointment</code>.
      * This is the Appointment class that contains all the information
-     * regarding an appointment. {@link AppointmentBook}
+     * regarding an appointment. {@link edu.pdx.cs410J.forgie.server.AppointmentBook}
      * then adds the appointment to a list of appointments.
      *
      * @param description The description of an appointment.
